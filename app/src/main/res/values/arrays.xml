@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="genero">
+        <item>male</item>
+        <item>female</item>
+    </string-array>
+    <string-array name="vehicle_type">
+        <item>Car</item>
+        <item>Bike</item>
+        <item>Motorbike</item>
+        <item>Bicicle</item>
+        <item>Electric Scooter</item>
+    </string-array>
+    <string-array name="fuel_type">
+        <item>Gas</item>
+        <item>Diesel</item>
+    </string-array>
+</resources>
