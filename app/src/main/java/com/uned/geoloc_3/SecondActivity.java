@@ -66,6 +66,15 @@ public class SecondActivity extends AppCompatActivity {
         gender_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_genre.setAdapter(gender_adapter);
 
+        //crea el objeto Retrofit
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://avillena-pfg.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        //Llamada a la interface
+        jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,14 +162,6 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void getVehicles() {
-        //crea el objeto Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://avillena-pfg.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        //Llamada a la interface
-        JsonHerokuapp jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
         Call<List<Vehicle>> call = jsonHerokuapp.getVehicles();
 
         //se hace un enqueue
@@ -197,14 +198,6 @@ public class SecondActivity extends AppCompatActivity {
 
     // Método que realiza la petición POST al servidor para crear un nuevo Driver
     private void createDriver(String email, String password, String name, String surname, String birthdate, String genre, int mobile_number) {
-        //crea el objeto Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://avillena-pfg.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        //Llamada a la interface
-        JsonHerokuapp jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
 
         Driver driver = new Driver(email, password, name, surname, birthdate, genre, mobile_number, true);
 
@@ -223,11 +216,11 @@ public class SecondActivity extends AppCompatActivity {
         System.out.println(driver.getName());
 
 
+        /*
         Map<String, String> fields = new HashMap<>();
         fields.put("email", email);
         fields.put("password", password);
         fields.put("name", name);
-        /*
         fields.put("surname", surname);
         fields.put("birthdate", birthdate);
         fields.put("genre", genre);
@@ -266,6 +259,7 @@ public class SecondActivity extends AppCompatActivity {
 
                  */
 
+                Toast.makeText(SecondActivity.this, "User: " + postResponse.getEmail() + " registered!", Toast.LENGTH_SHORT).show();
                 System.out.println(content);
             }
 
