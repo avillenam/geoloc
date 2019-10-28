@@ -27,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserLogedActivity extends AppCompatActivity {
 
-    TextView tv_emailUSer, tv_idDriver;
+    TextView tv_emailUSer, tv_idDriver, tv_vehicle_selected;
     Button btn_back, btn_exit;
     Spinner spinner_vehicles;
     private List<Vehicle> vehiclesList = new ArrayList<Vehicle>();
@@ -40,6 +40,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
         tv_emailUSer = findViewById(R.id.tv_email);
         tv_idDriver = findViewById(R.id.tv_idDriver);
+        tv_vehicle_selected = findViewById(R.id.tv_vehicle2);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
@@ -47,18 +48,29 @@ public class UserLogedActivity extends AppCompatActivity {
         // Hace una llamada GET al servidor Node.js solicitando los vehiculos
         getVehicles();
 
+        for(Vehicle vehicle:vehiclesList){
+            System.out.println(vehicle);
+        }
+
         //Rellena el spinner después de hacer la consulta GET getVehicles() al servidor
-        ArrayAdapter<String> vehicleArrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, vehiclesString);
-        vehicleArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_vehicles.setAdapter(vehicleArrayAdapter);
+        //ArrayAdapter<String> vehicleArrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, vehiclesString);
+        //vehicleArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //spinner_vehicles.setAdapter(vehicleArrayAdapter);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, vehiclesString);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner_vehicles.setAdapter(adapter);
+
+
 
         // Selección vehículo en el Spinner
         spinner_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String vehicle = (String) parent.getSelectedItem();
+                String vehicle = (String) parent.getSelectedItem().toString();
                 displayVehicleData(vehicle);
                 System.out.println("Id vehiculo seleccionado: " + vehicle);
+                Toast.makeText(parent.getContext(), "Id vehiculo seleccionado: " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             }
 
             @Override
