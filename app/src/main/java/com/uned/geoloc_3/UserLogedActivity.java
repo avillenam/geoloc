@@ -152,6 +152,9 @@ public class UserLogedActivity extends AppCompatActivity {
                         Vehicle vehicle = (Vehicle) parent.getSelectedItem();
                         displayUserData(vehicle);
                         Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + vehicle, Toast.LENGTH_SHORT).show();
+
+                        // TODO: una vez seleccionado el vehículo, habría que poner tanto para el Vehicle como para el Driver, available = false;
+                        // para ello, habría qe añadir sendos métodos POST en la aplicación del Node.js para que actualice esto.
                     }
 
                     @Override
