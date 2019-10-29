@@ -142,28 +142,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
-    <TextView
-        android:id="@+id/tv_vehicle2"
+    <Spinner
+        android:id="@+id/spinner_vehicles"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_vehicles"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
-
-    <Spinner
-        android:id="@+id/spinner_vehicles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
 
 

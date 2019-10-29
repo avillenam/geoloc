@@ -45,13 +45,10 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Vehicle{" +
-                "id_vehicle=" + id_vehicle +
-                ", type='" + type + '\'' +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", available=" + available +
-                '}';
+        return "id:" + id_vehicle +
+                ", " + type +
+                ", " + brand +
+                ", " + model;
     }
 }
 
