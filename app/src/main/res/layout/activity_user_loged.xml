@@ -157,7 +157,7 @@
 
     <Button
         android:id="@+id/btn_create_vehicle"
-        android:layout_width="119dp"
+        android:layout_width="108dp"
         android:layout_height="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
@@ -167,8 +167,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_deattach_vehicle"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles" />
+
+    <Button
+        android:id="@+id/btn_deattach_vehicle"
+        android:layout_width="135dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="356dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Unlink Vehicle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch"
+        tools:layout_editor_absoluteX="175dp"
+        tools:layout_editor_absoluteY="516dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
