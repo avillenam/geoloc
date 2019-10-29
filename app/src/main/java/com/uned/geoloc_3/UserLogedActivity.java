@@ -28,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UserLogedActivity extends AppCompatActivity {
 
     TextView tv_emailUSer, tv_idDriver;
-    Button btn_back, btn_exit;
+    Button btn_back, btn_exit, btn_new_vehicle;
     Spinner spinner_vehicles;
     private List<Vehicle> vehiclesList = new ArrayList<Vehicle>();
     private List<Vehicle> vehiclesAvailable = new ArrayList<Vehicle>();
@@ -43,6 +43,7 @@ public class UserLogedActivity extends AppCompatActivity {
         tv_idDriver = findViewById(R.id.tv_idDriver);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
+        btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
 
         // Hace una llamada GET al servidor Node.js solicitando los vehiculos
@@ -63,6 +64,14 @@ public class UserLogedActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UserLogedActivity.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        // TODO: crear nuevo vehículo
+        btn_new_vehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(UserLogedActivity.this, "Crear nuevo Vehiculo", Toast.LENGTH_SHORT).show();
             }
         });
 
