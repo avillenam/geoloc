@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btn_login);
         btoRegister = (Button) findViewById(R.id.btn_register);
         btn_exit = (Button) findViewById(R.id.btn_exit);
-        et_email = (EditText) findViewById(R.id.tv_email);
+        et_email = (EditText) findViewById(R.id.txt_email2);
         et_password = (EditText) findViewById(R.id.et_password);
 
         //crea el objeto Retrofit
@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Function that make Driver login
     private void loginUser(final String email, String pass) {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put("userId", email);
-        parameters.put("_sort", pass);
+        //Map<String, String> parameters = new HashMap<>();
+        //parameters.put("userId", email);
+        //parameters.put("_sort", pass);
 
         final String emailUser = email;
 
@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("¡Algo ha fallado!");
                     System.out.println(response);
 
-                        Toast.makeText(MainActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                        //System.out.println("Code: " + response.code());
-                        return;
+                    Toast.makeText(MainActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    //System.out.println("Code: " + response.code());
+                    return;
                 }
 
                 LoginCode loginCode = response.body();

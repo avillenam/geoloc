@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +28,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserLogedActivity extends AppCompatActivity {
 
-    TextView tv_emailUSer, tv_idDriver;
-    Button btn_back, btn_exit, btn_new_vehicle;
+    TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
+    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers;
+    Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle;
     Spinner spinner_vehicles;
-    private List<Vehicle> vehiclesList = new ArrayList<Vehicle>();
-    private List<Vehicle> vehiclesAvailable = new ArrayList<Vehicle>();
+    Switch switch_start_location;
+    private List<Vehicle> vehiclesList;
+    private List<Vehicle> vehiclesAvailable;
+    private List<String> listVehicles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +43,24 @@ public class UserLogedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_loged);
 
 
-        tv_emailUSer = findViewById(R.id.tv_email);
-        tv_idDriver = findViewById(R.id.tv_idDriver);
+        txt_emailUSer = (TextView) findViewById(R.id.txt_email2);
+        txt_idDriver = (TextView) findViewById(R.id.txt_idDriver2);
+        txt_name = (TextView) findViewById(R.id.txt_name2);
+        txt_surname = (TextView) findViewById(R.id.txt_surname2);
+        txt_mobile = (TextView) findViewById(R.id.txt_mobile2);
+        txt_gender = (TextView) findViewById(R.id.txt_gender2);
+        txt_idVehicle = (TextView) findViewById(R.id.txt_idVehicle2);
+        txt_type = (TextView) findViewById(R.id.txt_type2);
+        txt_brand = (TextView) findViewById(R.id.txt_brand2);
+        txt_model = (TextView) findViewById(R.id.txt_model2);
+        txt_fuel = (TextView) findViewById(R.id.txt_fuel2);
+        txt_passengers = (TextView) findViewById(R.id.txt_passengers2);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
+        btn_deattach_vehicle = (Button) findViewById(R.id.btn_deattach_vehicle);
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
+        switch_start_location = (Switch) findViewById(R.id.switch1);
 
         // Hace una llamada GET al servidor Node.js solicitando los vehiculos
         getVehicles();
@@ -55,8 +71,11 @@ public class UserLogedActivity extends AppCompatActivity {
         if (userBundle != null) {
             String email = userBundle.getString("email");
             int id_driver = userBundle.getInt("id_driver");
-            tv_idDriver.setText("id: " + id_driver);
-            tv_emailUSer.setText(email);
+
+            //TODO: añadir método GET para recuperrar los datos del Driver con el id
+
+            txt_idDriver.setText(id_driver);
+            txt_emailUSer.setText(email);
         }
 
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -75,11 +94,29 @@ public class UserLogedActivity extends AppCompatActivity {
             }
         });
 
+        btn_deattach_vehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(UserLogedActivity.this, "Desenlazar Vehiculo del Conductor", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // cerrar de la Activity
         btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        switch_start_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (switch_start_location.isChecked()) {
+                    Toast.makeText(UserLogedActivity.this, "Comienza la localización", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UserLogedActivity.this, "Para la localización", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -119,29 +156,22 @@ public class UserLogedActivity extends AppCompatActivity {
                 Log.i("onSuccess", response.body().toString());
 
                 //almacenamos la respuesta en una lista. Ya estan pareseados al haber usado un converter (GSON)
+                vehiclesList = new ArrayList<Vehicle>();
                 vehiclesList = response.body();
 
                 // Filtrar los que estén disponibles (available=true)
-                for(Vehicle vehicle : vehiclesList){
-                    if(vehicle.getAvailable()==true){
+                vehiclesAvailable = new ArrayList<Vehicle>();
+                listVehicles = new ArrayList<String>();
+                listVehicles.add("Select vehicle");
+                for (Vehicle vehicle : vehiclesList) {
+                    if (vehicle.getAvailable() == true) {
                         vehiclesAvailable.add(vehicle);
+                        listVehicles.add(vehicle.toString());
                     }
                 }
 
-                /*
-                for (Vehicle vehicle : vehiclesList) {
-                    String content = "";
-                    content += String.valueOf(vehicle.getId_vehicle());
-                    content += ", " + String.valueOf(vehicle.getType());
-                    content += ", " + String.valueOf(vehicle.getBrand());
-                    content += ", " + String.valueOf(vehicle.getModel());
-                    content += ", " + String.valueOf(vehicle.getAvailable());
-                    vehiclesString.add(content);
-                }
 
-                 */
-
-                ArrayAdapter<Vehicle> adapter = new ArrayAdapter<Vehicle>(UserLogedActivity.this, android.R.layout.simple_spinner_item, vehiclesAvailable);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserLogedActivity.this, android.R.layout.simple_spinner_item, listVehicles);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 spinner_vehicles.setAdapter(adapter);
@@ -149,9 +179,13 @@ public class UserLogedActivity extends AppCompatActivity {
                 spinner_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        Vehicle vehicle = (Vehicle) parent.getSelectedItem();
-                        displayUserData(vehicle);
-                        Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + vehicle, Toast.LENGTH_SHORT).show();
+                        //Vehicle vehicle = (Vehicle) parent.getSelectedItem();
+                        if(position!=0){
+                            Vehicle vehicle = vehiclesAvailable.get(position-1);
+                            displayUserData(vehicle);
+                            Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + vehicle, Toast.LENGTH_SHORT).show();
+                        }
+
 
                         // TODO: una vez seleccionado el vehículo, habría que poner tanto para el Vehicle como para el Driver, available = false;
                         // para ello, habría qe añadir sendos métodos POST en la aplicación del Node.js para que actualice esto.

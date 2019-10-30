@@ -53,7 +53,7 @@ public class SecondActivity extends AppCompatActivity {
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         spinner_genre = (Spinner) findViewById(R.id.spinner_vehicles);
-        et_email = (EditText) findViewById(R.id.tv_email);
+        et_email = (EditText) findViewById(R.id.txt_email2);
         et_password = (EditText) findViewById(R.id.et_password);
         et_name = (EditText) findViewById(R.id.et_name);
         et_surname = (EditText) findViewById(R.id.et_surname);
