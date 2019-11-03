@@ -40,8 +40,8 @@ public class SecondActivity extends AppCompatActivity {
     Button btn_registry, btn_back, btn_exit;
     EditText et_email, et_password, et_name, et_surname, et_birthdate, et_mobile_phone;
     Spinner spinner_genre, spinner_vehicle;
-    private List<Vehicle> vehiclesList = new ArrayList<Vehicle>();
-    private List<String> vehiclesString = new ArrayList<String>();
+    private List<Vehicle> vehiclesList;
+    private List<String> vehiclesString;
     String[] generos;
 
     @Override
@@ -177,7 +177,9 @@ public class SecondActivity extends AppCompatActivity {
                 Log.i("onSuccess", response.body().toString());
 
                 //almacenamos la respuesta en una lista. Ya estan pareseados al haber usado un converter (GSON)
+                vehiclesList = new ArrayList<Vehicle>();
                 vehiclesList = response.body();
+                vehiclesString = new ArrayList<String>();
 
                 System.out.println("Tipo: ");
                 for (Vehicle vehicle : vehiclesList) {
@@ -309,7 +311,7 @@ public class SecondActivity extends AppCompatActivity {
                 content += "Type: " + postResponse.getType() + "\n";
                 content += "Brand: " + postResponse.getBrand() + "\n";
                 content += "Model: " + postResponse.getModel() + "\n";
-                content += "Passengers: " + postResponse.getPassengeres() + "\n";
+                content += "Passengers: " + postResponse.getPassengers() + "\n";
                 content += "Fuel: " + postResponse.getFuel() + "\n";
                 content += "Available: " + postResponse.getAvailable() + "\n\n";
 

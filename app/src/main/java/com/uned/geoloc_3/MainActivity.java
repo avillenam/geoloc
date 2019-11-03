@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         //parameters.put("userId", email);
         //parameters.put("_sort", pass);
 
-        final String emailUser = email;
+        //final String emailUser = email;
 
         System.out.println("Parametros recibidos de la llamada:");
         System.out.println(email);
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
                         Bundle userBundle = new Bundle();
-                        userBundle.putString("email", emailUser);
+                        userBundle.putString("email", email);
                         userBundle.putInt("id_driver", id_driver);
 
                         // Le añadimos al Intent los datos que queremos enviar

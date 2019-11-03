@@ -7,13 +7,19 @@ public class Vehicle {
     private String type;
     private String brand;
     private String model;
-    private int passengeres;
+    private int passengers;
     private String fuel;
     private Boolean available;
 
-    public Vehicle(String car, String tesla, String s, int i, String electric, boolean b) {
+    public Vehicle(String type, String brand, String model, int passengers, String fuel, Boolean available) {
+        this.id_vehicle = id_vehicle;
+        this.type = type;
+        this.brand = brand;
+        this.model = model;
+        this.passengers = passengers;
+        this.fuel = fuel;
+        this.available = available;
     }
-
 
     public int getId_vehicle() {
         return id_vehicle;
@@ -31,8 +37,8 @@ public class Vehicle {
         return model;
     }
 
-    public int getPassengeres() {
-        return passengeres;
+    public int getPassengers() {
+        return passengers;
     }
 
     public String getFuel() {

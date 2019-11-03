@@ -95,4 +95,8 @@ public interface JsonHerokuapp {
 
     @GET("loginDriver/{email}/{password}")
     Call<LoginCode> loginDriver(@Path("email") String email, @Path("password") String password);
+
+    // Llamada GET al servidor que devuelve un objeto Driver a partir del id_driver
+    @GET("driver/{id_driver}")
+    Call<List<Driver>> driverById(@Path("id_driver") int id_driver);
 }

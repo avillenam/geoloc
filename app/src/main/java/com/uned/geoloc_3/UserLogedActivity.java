@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.uned.geoloc_3.Interface.JsonHerokuapp;
+import com.uned.geoloc_3.Model.Driver;
+import com.uned.geoloc_3.Model.LoginCode;
 import com.uned.geoloc_3.Model.Vehicle;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ public class UserLogedActivity extends AppCompatActivity {
     private List<Vehicle> vehiclesList;
     private List<Vehicle> vehiclesAvailable;
     private List<String> listVehicles;
+    private JsonHerokuapp jsonHerokuapp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,16 @@ public class UserLogedActivity extends AppCompatActivity {
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
         switch_start_location = (Switch) findViewById(R.id.switch1);
 
+        //crea el objeto Retrofit
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://avillena-pfg.herokuapp.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        //Llamada a la interface
+        jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
+
+
         // Hace una llamada GET al servidor Node.js solicitando los vehiculos
         getVehicles();
 
@@ -72,11 +86,10 @@ public class UserLogedActivity extends AppCompatActivity {
             String email = userBundle.getString("email");
             int id_driver = userBundle.getInt("id_driver");
 
-            //TODO: añadir método GET para recuperrar los datos del Driver con el id
+            getDriverById(id_driver);
 
-            txt_idDriver.setText(id_driver);
-            txt_emailUSer.setText(email);
         }
+
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,14 +147,19 @@ public class UserLogedActivity extends AppCompatActivity {
 
     private void getVehicles() {
         //crea el objeto Retrofit
+        /*
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://avillena-pfg.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+         */
+
         //Llamada a la interface
-        JsonHerokuapp jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
+        //JsonHerokuapp jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
+        //jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
         Call<List<Vehicle>> call = jsonHerokuapp.getVehicles();
+        System.out.println("Llamada a la interface dentro del getVehicles");
 
         //se hace un enqueue
         call.enqueue(new Callback<List<Vehicle>>() {
@@ -180,11 +198,21 @@ public class UserLogedActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         //Vehicle vehicle = (Vehicle) parent.getSelectedItem();
-                        if(position!=0){
-                            Vehicle vehicle = vehiclesAvailable.get(position-1);
+                        if (position != 0) {
+                            Vehicle vehicle = vehiclesAvailable.get(position - 1);
                             displayUserData(vehicle);
                             Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + vehicle, Toast.LENGTH_SHORT).show();
+
+                            // Rellenar los TextView con los datos correspondientes del vehículo seleccionado
+                            txt_idVehicle.setText(String.valueOf(vehicle.getId_vehicle()));
+                            txt_type.setText(vehicle.getType());
+                            txt_brand.setText(vehicle.getBrand());
+                            txt_model.setText(vehicle.getModel());
+                            txt_fuel.setText(vehicle.getFuel());
+                            txt_passengers.setText(String.valueOf(vehicle.getPassengers()));
                         }
+
+                        // TODO: establecer la relación
 
 
                         // TODO: una vez seleccionado el vehículo, habría que poner tanto para el Vehicle como para el Driver, available = false;
@@ -211,4 +239,36 @@ public class UserLogedActivity extends AppCompatActivity {
         Toast.makeText(this, vehicle, Toast.LENGTH_LONG).show();
     }
 
+    public void getDriverById(int id_driver) {
+        System.out.println("dentro del getDriverById");
+        Call<List<Driver>> call = jsonHerokuapp.driverById(id_driver);
+        System.out.println("Objeto call instanciado");
+        call.enqueue(new Callback<List<Driver>>() {
+            @Override
+            public void onResponse(Call<List<Driver>> call, Response<List<Driver>> response) {
+                if (!response.isSuccessful()) {
+                    System.out.println("¡Algo ha fallado!");
+                    Toast.makeText(UserLogedActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Driver driver = response.body().get(0);
+
+                // Rellenamos los TextView con los atrbutos del objeto Driver devuelto
+                txt_emailUSer.setText(driver.getEmail());
+                txt_idDriver.setText(String.valueOf(driver.getId_driver()));
+                txt_name.setText(driver.getName());
+                txt_surname.setText(driver.getSurname());
+                txt_mobile.setText(String.valueOf(driver.getMobile_number()));
+                txt_gender.setText(driver.getGenre());
+            }
+
+            @Override
+            public void onFailure(Call<List<Driver>> call, Throwable t) {
+                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+
+        });
+    }
 }
