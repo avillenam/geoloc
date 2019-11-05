@@ -26,7 +26,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Passengers:"
+        android:text="Pasajeros:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_fuel" />
@@ -76,7 +76,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Type:"
+        android:text="Tipo:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -101,7 +101,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Brand:"
+        android:text="Marca:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_type" />
@@ -114,7 +114,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Model:"
+        android:text="Modelo:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_brand" />
@@ -127,7 +127,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Fuel:"
+        android:text="Combustible:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_model" />
@@ -155,7 +155,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="DRIVER LOGED!"
+        android:text="Conductor Logueado"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
@@ -176,7 +176,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Driver"
+        android:text="Conductor"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -276,7 +276,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name:"
+        android:text="Nombre:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_email" />
@@ -289,7 +289,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Surname:"
+        android:text="Apellidos:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_name" />
@@ -302,7 +302,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Mobile num:"
+        android:text="Num móvil:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_surname" />
@@ -315,7 +315,7 @@
         android:layout_marginLeft="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Gender:"
+        android:text="Género:"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_mobile" />
@@ -330,7 +330,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_rounded_border"
-        android:text="BACK"
+        android:text="Volver"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_exit"
         app:layout_constraintStart_toStartOf="parent" />
@@ -343,7 +343,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_rounded_border"
-        android:text="EXIT"
+        android:text="Salir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_back" />
@@ -359,7 +359,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Vehicle"
+        android:text="Vehículo"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -381,13 +381,13 @@
 
     <Button
         android:id="@+id/btn_create_vehicle"
-        android:layout_width="108dp"
-        android:layout_height="32dp"
+        android:layout_width="121dp"
+        android:layout_height="29dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/button_rounded_border"
-        android:text="New Vehicle"
+        android:text="Nuevo Vehículo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.99"
@@ -397,23 +397,38 @@
 
     <Button
         android:id="@+id/btn_deattach_vehicle"
-        android:layout_width="135dp"
-        android:layout_height="32dp"
+        android:layout_width="187dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Desenlazar Vehículo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_attach_vehicle"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btn_attach_vehicle"
+        android:layout_width="187dp"
+        android:layout_height="37dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/button_rounded_border"
-        android:text="Unlink Vehicle"
+        android:text="Enlazar Vehículo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.401" />
+        app:layout_constraintVertical_bias="0.412" />
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Location"
+        android:text="Comenzar Localización"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

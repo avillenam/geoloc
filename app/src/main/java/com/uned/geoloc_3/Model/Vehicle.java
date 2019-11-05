@@ -1,7 +1,5 @@
 package com.uned.geoloc_3.Model;
 
-import androidx.annotation.NonNull;
-
 public class Vehicle {
     private int id_vehicle;
     private String type;
