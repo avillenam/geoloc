@@ -99,7 +99,12 @@ public class UserLogedActivity extends AppCompatActivity {
             System.out.println(id_driver);
             System.out.println(email);
 
+            // Obtener el objeto conductor a partir del id_driver
             getDriverById(id_driver);
+
+            // Obtener el objeto vehículo asociado al conductor a partir del id_driver
+            getVehicleByIdDriver(id_driver);
+
 
         }
 
@@ -169,6 +174,39 @@ public class UserLogedActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(UserLogedActivity.this, "Para la localización", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    private void getVehicleByIdDriver(int id_driver) {
+        Call<List<Vehicle>> call = jsonHerokuapp.getVehicleByIdDriver(id_driver);
+
+        //se hace un enqueue
+        call.enqueue(new Callback<List<Vehicle>>() {
+            @Override
+            public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
+                if (!response.isSuccessful()) {
+                    System.out.println("¡Algo ha fallado!");
+                    Toast.makeText(UserLogedActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Almacena en el objeto vehicle el vehículo asociado al conductor actual
+                vehicle = response.body().get(0);
+
+                // Rellenar los TextView con los datos correspondientes del vehículo asociado al conductor actual
+                txt_idVehicle.setText(String.valueOf(vehicle.getId_vehicle()));
+                txt_type.setText(vehicle.getType());
+                txt_brand.setText(vehicle.getBrand());
+                txt_model.setText(vehicle.getModel());
+                txt_fuel.setText(vehicle.getFuel());
+                txt_passengers.setText(String.valueOf(vehicle.getPassengers()));
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Vehicle>> call, Throwable t) {
+                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

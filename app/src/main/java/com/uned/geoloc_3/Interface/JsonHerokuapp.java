@@ -100,5 +100,9 @@ public interface JsonHerokuapp {
     @GET("driver/{id_driver}")
     Call<List<Driver>> driverById(@Path("id_driver") int id_driver);
 
+    // Petición GET para obtener el objeto Vehicle asociado al conductor con id_driver
+    @GET("vehicleByIdDriver/{id_driver}")
+    Call<List<Vehicle>> getVehicleByIdDriver(@Path("id_driver") int id_driver);
+
     // Establece relación conductor-vehiculo
 }
