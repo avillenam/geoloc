@@ -59,14 +59,13 @@
         android:id="@+id/txt_idVehicle2"
         android:layout_width="200dp"
         android:layout_height="19dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:ems="10"
         android:inputType="text"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
 
     <TextView
         android:id="@+id/txt_type"
@@ -155,7 +154,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Conductor Logueado"
+        android:text="Menú Conductor"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
@@ -359,7 +358,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Vehículo"
+        android:text="Vehículo asociado"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -372,17 +371,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_passengers2" />
 
     <Button
         android:id="@+id/btn_create_vehicle"
-        android:layout_width="121dp"
-        android:layout_height="29dp"
+        android:layout_width="139dp"
+        android:layout_height="28dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
@@ -390,10 +391,10 @@
         android:text="Nuevo Vehículo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.99"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/btn_deattach_vehicle"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.412" />
+        app:layout_constraintVertical_bias="0.04" />
 
     <Button
         android:id="@+id/btn_deattach_vehicle"
@@ -422,7 +423,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.412" />
+        app:layout_constraintVertical_bias="0.04" />
 
     <Switch
         android:id="@+id/switch1"
@@ -451,10 +452,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
         android:text="id:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
