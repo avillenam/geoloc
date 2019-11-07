@@ -88,10 +88,7 @@ public class UserLogedActivity extends AppCompatActivity {
         jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
 
 
-        // Hace una llamada GET al servidor Node.js solicitando los vehiculos para mostrarlos en el Spinner
-        getVehicles();
-
-        //Obtenemos el dato enviao por parámetro a través del Bundle
+        //Obtenemos los datos del conductor enviados a través del Bundle
         Bundle userBundle = this.getIntent().getExtras();
 
         if (userBundle != null) {
@@ -116,6 +113,8 @@ public class UserLogedActivity extends AppCompatActivity {
 
         }
 
+        // Hace una llamada GET al servidor Node.js solicitando los vehiculos para mostrarlos en el Spinner
+        getVehicles();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,18 +136,6 @@ public class UserLogedActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: establecer la relación
-                // Primero elimina cualquier relación anterior establecida
-                /*
-                if (id_current_vehicle != 0) {
-                    deleteVehicleDriverRelation(id_current_driver);
-                }
-
-                 */
-
-                // Establece la relación conductor-vecículo
-/*                System.out.println("Se va a crear una relacion conductor-vehículo");
-                System.out.println(id_current_driver);
-                System.out.println(id_selected_vehicle);*/
 
                 imprimeEstadoActual("Antes del btn_attach_vehicle");
 
@@ -213,12 +200,12 @@ public class UserLogedActivity extends AppCompatActivity {
     }
 
     private void getVehicleByIdDriver(int id_driver) {
-        Call<List<Vehicle>> call = jsonHerokuapp.getVehicleByIdDriver(id_driver);
+        Call<Vehicle> call = jsonHerokuapp.getVehicleByIdDriver(id_driver);
 
         //se hace un enqueue
-        call.enqueue(new Callback<List<Vehicle>>() {
+        call.enqueue(new Callback<Vehicle>() {
             @Override
-            public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
+            public void onResponse(Call<Vehicle> call, Response<Vehicle> response) {
                 if (!response.isSuccessful()) {
                     System.out.println("¡Algo ha fallado!");
                     Toast.makeText(UserLogedActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
@@ -229,7 +216,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
 
                 // Almacena en el objeto vehicle el vehículo asociado al conductor actual
-                current_vehicle = response.body().get(0);
+                current_vehicle = response.body();
 
                 if (current_vehicle != null) {
                     id_current_vehicle = current_vehicle.getId_vehicle();
@@ -255,7 +242,7 @@ public class UserLogedActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Vehicle>> call, Throwable t) {
+            public void onFailure(Call<Vehicle> call, Throwable t) {
                 Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -305,45 +292,8 @@ public class UserLogedActivity extends AppCompatActivity {
                     }
                 }
 
+                creaSpinnerVehiculos();
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserLogedActivity.this, android.R.layout.simple_spinner_item, listVehicles);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                spinner_vehicles.setAdapter(adapter);
-
-                // Funcionalidad cuando se selecciona un vehículo del Spinner
-                spinner_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        if (position != 0) {
-
-                            // Selecciona vehículo actual y lo almacena el la variable 'current_vehicle'
-                            selected_vehicle = vehiclesAvailable.get(position - 1);
-                            id_selected_vehicle = selected_vehicle.getId_vehicle();
-                            //displayUserData(current_vehicle);
-                            Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_SHORT).show();
-
-                            // Rellenar los TextView con los datos correspondientes del vehículo seleccionado
-                            txt_idVehicle.setText(String.valueOf(selected_vehicle.getId_vehicle()));
-                            txt_type.setText(selected_vehicle.getType());
-                            txt_brand.setText(selected_vehicle.getBrand());
-                            txt_model.setText(selected_vehicle.getModel());
-                            txt_fuel.setText(selected_vehicle.getFuel());
-                            txt_passengers.setText(String.valueOf(selected_vehicle.getPassengers()));
-                        }
-
-                        imprimeEstadoActual("Después de getVehicles");
-
-
-                        // TODO: una vez seleccionado el vehículo, habría que poner tanto para el Vehicle como para el Driver, available = false;
-                        // para ello, habría qe añadir sendos métodos POST en la aplicación del Node.js para que actualice esto.
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
             }
 
             @Override
@@ -354,11 +304,65 @@ public class UserLogedActivity extends AppCompatActivity {
         });
     }
 
-    // Establece relación conductor-vehículo
-    public void driverVehicleRelation(int id_driver_current, int id_vehicle_current) {
-        imprimeEstadoActual("Antes de driverVehicleRelation");
+    private void creaSpinnerVehiculos() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserLogedActivity.this, android.R.layout.simple_spinner_item, listVehicles);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Call<Message> call = jsonHerokuapp.driverVehicleRelation(id_driver_current, id_vehicle_current);
+        spinner_vehicles.setAdapter(adapter);
+
+        // Funcionalidad cuando se selecciona un vehículo del Spinner
+        spinner_vehicles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+
+                    // Selecciona vehículo actual y lo almacena el la variable 'current_vehicle'
+                    selected_vehicle = vehiclesAvailable.get(position - 1);
+                    id_selected_vehicle = selected_vehicle.getId_vehicle();
+
+
+                    if ((current_vehicle != null) && (id_current_vehicle != 0)) {
+                        deleteVehicleDriverRelation(id_current_driver);
+                        vehicleAvailability(id_current_vehicle, true);
+                        driverVehicleRelation(id_current_driver, id_selected_vehicle);
+                    } else {
+                        driverVehicleRelation(id_current_driver, id_selected_vehicle);
+                    }
+
+                    current_vehicle = selected_vehicle;
+                    id_current_vehicle = id_selected_vehicle;
+
+
+                    Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_SHORT).show();
+                    // Rellenar los TextView con los datos correspondientes del vehículo seleccionado
+                    rellenaTxtViewVehicle();
+
+                    /*
+                    txt_idVehicle.setText(String.valueOf(selected_vehicle.getId_vehicle()));
+                    txt_type.setText(selected_vehicle.getType());
+                    txt_brand.setText(selected_vehicle.getBrand());
+                    txt_model.setText(selected_vehicle.getModel());
+                    txt_fuel.setText(selected_vehicle.getFuel());
+                    txt_passengers.setText(String.valueOf(selected_vehicle.getPassengers()));
+
+                     */
+
+
+                    driverAvailability(id_current_driver, false);
+                    vehicleAvailability(id_current_vehicle, false);
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void vehicleAvailability(int id_vehicle, boolean b) {
+        Call<Message> call = jsonHerokuapp.vehicleAvailability(id_vehicle, b);
         call.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
@@ -367,6 +371,31 @@ public class UserLogedActivity extends AppCompatActivity {
                     System.out.println("Código: " + response.code());
                 }
 
+                Message msg = response.body();
+                System.out.println(response);
+                System.out.println(msg);
+                System.out.println("msg: " + msg.getResponse());
+                //Log.i("onSuccess", response.body().toString());
+                Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void driverAvailability(int id_driver, boolean b) {
+        Call<Message> call = jsonHerokuapp.driverAvailability(id_driver, b);
+        call.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                // si no es satisfactoria la respuesta, muestra un mensaje con el error
+                if (!response.isSuccessful()) {
+                    System.out.println("Código: " + response.code());
+                }
 
                 Message msg = response.body();
                 System.out.println(response);
@@ -375,8 +404,33 @@ public class UserLogedActivity extends AppCompatActivity {
                 //Log.i("onSuccess", response.body().toString());
                 Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
-                imprimeEstadoActual("Después de driverVehicleRelation");
+            }
 
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Establece relación conductor-vehículo
+    public void driverVehicleRelation(int id_driver, int id_vehicle) {
+
+        Call<Message> call = jsonHerokuapp.driverVehicleRelation(id_driver, id_vehicle);
+        call.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                // si no es satisfactoria la respuesta, muestra un mensaje con el error
+                if (!response.isSuccessful()) {
+                    System.out.println("Código: " + response.code());
+                }
+
+                Message msg = response.body();
+                System.out.println(response);
+                System.out.println(msg);
+                System.out.println("msg: " + msg.getResponse());
+                //Log.i("onSuccess", response.body().toString());
+                Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -388,7 +442,6 @@ public class UserLogedActivity extends AppCompatActivity {
 
     // Elimina la relación conductor-vehículo para el id_driver especificado
     public void deleteVehicleDriverRelation(int id_driver) {
-        imprimeEstadoActual("Antes de deleteVehicleDriverRelation");
 
         Call<Message> call = jsonHerokuapp.deleteDriverVehicleRelation(id_driver);
         call.enqueue(new Callback<Message>() {
@@ -406,9 +459,8 @@ public class UserLogedActivity extends AppCompatActivity {
                 Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
                 // Borra todos los textview al desenlazar el vehículo actual
-                borraTxtViewVehicle();
+                //borraTxtViewVehicle();
 
-                imprimeEstadoActual("Después de deleteVehicleDriverRelation");
 
             }
 
@@ -435,7 +487,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
     private void rellenaTxtViewVehicle() {
 
-        if(current_vehicle!= null){
+        if (current_vehicle != null) {
             txt_idVehicle.setText(String.valueOf(current_vehicle.getId_vehicle()));
             txt_type.setText(current_vehicle.getType());
             txt_brand.setText(current_vehicle.getBrand());

@@ -84,6 +84,22 @@ public interface JsonHerokuapp {
             @Field("id_driver") int id_driver
     );
 
+    // Realiza una petición POST para establecer la disponibilidad del conductor
+    @FormUrlEncoded
+    @POST("driverAvailability")
+    Call<Message> driverAvailability(
+            @Field("id_driver") int id_driver,
+            @Field("availability") Boolean availability
+    );
+
+    // Realiza una petición POST para establecer la disponibilidad del vehículo
+    @FormUrlEncoded
+    @POST("vehicleAvailability")
+    Call<Message> vehicleAvailability(
+            @Field("id_vehicle") int id_vehicle,
+            @Field("availability") Boolean availability
+    );
+
     @GET("loginDriver/{email}/{password}")
     Call<List<Vehicle>> getVehicle(@Path("id_vehicle") int id_vehicle);
 
@@ -102,7 +118,7 @@ public interface JsonHerokuapp {
 
     // Petición GET para obtener el objeto Vehicle asociado al conductor con id_driver
     @GET("vehicleByIdDriver/{id_driver}")
-    Call<List<Vehicle>> getVehicleByIdDriver(@Path("id_driver") int id_driver);
+    Call<Vehicle> getVehicleByIdDriver(@Path("id_driver") int id_driver);
 
     // Establece relación conductor-vehiculo
 }
