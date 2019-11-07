@@ -161,12 +161,10 @@ public class UserLogedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                imprimeEstadoActual("Antes de btn_deattach_vehicle");
-
                 Toast.makeText(UserLogedActivity.this, "Desenlazar Vehiculo del Conductor", Toast.LENGTH_SHORT).show();
                 deleteVehicleDriverRelation(id_current_driver);
 
-                imprimeEstadoActual("Después de btn_deattach_vehicle");
+                vehicleAvailability(id_current_vehicle, true);
 
             }
         });
