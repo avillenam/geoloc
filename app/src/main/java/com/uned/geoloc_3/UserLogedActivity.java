@@ -1,9 +1,22 @@
 package com.uned.geoloc_3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,11 +29,25 @@ import android.widget.Toast;
 
 import com.uned.geoloc_3.Interface.JsonHerokuapp;
 import com.uned.geoloc_3.Model.Driver;
+import com.uned.geoloc_3.Model.LoginCode;
 import com.uned.geoloc_3.Model.Message;
 import com.uned.geoloc_3.Model.Vehicle;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,7 +59,8 @@ public class UserLogedActivity extends AppCompatActivity {
 
     TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
     TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers;
-    Button btn_back, btn_exit, btn_new_vehicle, btn_attach_vehicle, btn_deattach_vehicle;
+    TextView txt_latitud, txt_longitud, txt_direccion;
+    Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion;
     Spinner spinner_vehicles;
     Switch switch_start_location;
     private List<Vehicle> vehiclesList;
@@ -50,6 +78,9 @@ public class UserLogedActivity extends AppCompatActivity {
 
     Vehicle selected_vehicle = null;
     int id_selected_vehicle;
+
+    String lat, lon;
+    int codigo;
 
 
     @Override
@@ -73,10 +104,15 @@ public class UserLogedActivity extends AppCompatActivity {
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
-        btn_attach_vehicle = (Button) findViewById(R.id.btn_attach_vehicle);
         btn_deattach_vehicle = (Button) findViewById(R.id.btn_deattach_vehicle);
+        btn_guardar_posicion = (Button) findViewById(R.id.btn_guardar_posicion);
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
         switch_start_location = (Switch) findViewById(R.id.switch1);
+
+        txt_latitud = (TextView) findViewById(R.id.txt_latitud);
+        txt_longitud = (TextView) findViewById(R.id.txt_longitud);
+        txt_direccion = (TextView) findViewById(R.id.txt_direccion);
+
 
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -132,31 +168,6 @@ public class UserLogedActivity extends AppCompatActivity {
             }
         });
 
-        btn_attach_vehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: establecer la relación
-
-                imprimeEstadoActual("Antes del btn_attach_vehicle");
-
-                if ((current_vehicle != null) && (id_current_vehicle != id_selected_vehicle)) {
-                    Toast.makeText(UserLogedActivity.this, "Desenlazar Vehiculo del Conductor", Toast.LENGTH_SHORT).show();
-                    deleteVehicleDriverRelation(id_current_driver);
-                    driverVehicleRelation(id_current_driver, id_selected_vehicle);
-                } else {
-                    driverVehicleRelation(id_current_driver, id_selected_vehicle);
-                }
-
-                rellenaTxtViewVehicle();
-
-                imprimeEstadoActual("Después del btn_attach_vehicle");
-
-                // TODO: comprobar que ho exista ya la relacion conductor-vehiculo, porque si no, tumba el servidor. O hacer la comprobación en el servidor
-                Toast.makeText(UserLogedActivity.this, "Enlace Vehiculo " + id_selected_vehicle + " del Conductor" + id_current_driver, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
         btn_deattach_vehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,17 +188,246 @@ public class UserLogedActivity extends AppCompatActivity {
             }
         });
 
+        final Timer timer = new Timer();
+
         switch_start_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (switch_start_location.isChecked()) {
                     Toast.makeText(UserLogedActivity.this, "Comienza la localización", Toast.LENGTH_SHORT).show();
+                    // temporizador cada 5 segundos guarda la posición
+                    //http://js.dokry.com/cul-es-el-equivalente-a-un-setinterval-settimeout-de-javascript-en-android-java.html
+
+
+                    Integer segundos = 5;
+
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            new Insertar(UserLogedActivity.this).execute();
+                            //Log.i("tag", "A Kiss every 5 seconds");
+                        }
+                    }, 0, segundos * 1000);
+
                 } else {
+                    timer.cancel();
                     Toast.makeText(UserLogedActivity.this, "Para la localización", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        btn_guardar_posicion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Insertar(UserLogedActivity.this).execute();
+                codigo = 0;
+            }
+        });
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
     }
+
+    //Insertamos los datos a nuestro webService a través del objeto HttpPost
+    private boolean insertar() {
+        Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, Double.valueOf(lon), Double.valueOf(lat));
+        call.enqueue(new Callback<LoginCode>() {
+            @Override
+            public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
+                if (!response.isSuccessful()) {
+                    System.out.println("Código: " + response.code());
+                }
+
+                LoginCode loginCode = response.body();
+                codigo = loginCode.getCode();
+
+                System.out.println("Código: " + response.code());
+                System.out.println("Código de respuesta: " + loginCode.getCode());
+            }
+
+            @Override
+            public void onFailure(Call<LoginCode> call, Throwable t) {
+
+            }
+        });
+
+        if (codigo == 1) {
+            System.out.println("return true");
+            return true;
+        } else {
+            System.out.println("return false");
+            return false;
+        }
+
+    }
+
+        /*
+        HttpClient httpClient;
+        List<NameValuePair> nameValuePairs;
+        HttpPost httpPost;
+        httpClient = new DefaultHttpClient();
+        httpPost = new HttpPost("https://avillena-pfg.herokuapp.com/position");//url del servidor
+        //empezamos a añadir nuestros datos
+        nameValuePairs = new ArrayList<NameValuePair>(4);
+        nameValuePairs.add(new BasicNameValuePair("id_vehicle", "2"));
+        nameValuePairs.add(new BasicNameValuePair("id_driver", "1"));
+        nameValuePairs.add(new BasicNameValuePair("coord_y", txt_latitud.getText().toString().trim()));
+        nameValuePairs.add(new BasicNameValuePair("coord_x", txt_longitud.getText().toString().trim()));
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            httpClient.execute(httpPost);
+            return true;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+         */
+
+
+    //AsyncTask para insertar Datos
+    class Insertar extends AsyncTask<String, String, String> {
+        private Activity context;
+
+        Insertar(Activity context) {
+            this.context = context;
+        }
+
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            if (insertar())
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        Toast.makeText(context, "Dato insertado con éxito", Toast.LENGTH_LONG).show();
+                        txt_latitud.setText("");
+                        txt_longitud.setText("");
+                        txt_direccion.setText("");
+                    }
+                });
+            else
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        Toast.makeText(context, "Datos no insertado con éxito", Toast.LENGTH_LONG).show();
+                    }
+                });
+            return null;
+        }
+    }
+
+    //Apartir de aqui empezamos a obtener la direciones y coordenadas
+    private void locationStart() {
+        LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Localizacion Local = new Localizacion();
+        Local.setMainActivity(UserLogedActivity.this);
+        final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!gpsEnabled) {
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+        txt_latitud.setText("Localizacion agregada");
+        txt_longitud.setText("");
+        txt_direccion.setText("");
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                locationStart();
+                return;
+            }
+        }
+
+    }
+
+    public void setLocation(Location loc) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        loc.getLatitude(), loc.getLongitude(), 1);
+                if (!list.isEmpty()) {
+                    Address DirCalle = list.get(0);
+                    txt_direccion.setText(DirCalle.getAddressLine(0));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* Aqui empieza la Clase Localizacion */
+    public class Localizacion implements LocationListener {
+        UserLogedActivity userLogedActivity;
+
+        public UserLogedActivity getMainActivity() {
+            return userLogedActivity;
+        }
+
+        public void setMainActivity(UserLogedActivity mainActivity) {
+            this.userLogedActivity = mainActivity;
+        }
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
+            loc.getLatitude();
+            loc.getLongitude();
+            //String lat, lon;
+            lat = String.valueOf(loc.getLatitude());
+            lon = String.valueOf(loc.getLongitude());
+            String Text = "Lat = " + lat + "\nLong = " + lat;
+            txt_latitud.setText(lat);
+            txt_longitud.setText(lon);
+            this.userLogedActivity.setLocation(loc);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es desactivado
+            txt_latitud.setText("GPS Desactivado");
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es activado
+            txt_latitud.setText("GPS Activado");
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            switch (status) {
+                case LocationProvider.AVAILABLE:
+                    Log.d("debug", "LocationProvider.AVAILABLE");
+                    break;
+                case LocationProvider.OUT_OF_SERVICE:
+                    Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    break;
+                case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                    Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                    break;
+            }
+        }
+    }
+
 
     private void imprimeEstadoActual(String msg) {
         System.out.println("Estado Actual:");
@@ -198,12 +438,12 @@ public class UserLogedActivity extends AppCompatActivity {
     }
 
     private void getVehicleByIdDriver(int id_driver) {
-        Call<Vehicle> call = jsonHerokuapp.getVehicleByIdDriver(id_driver);
+        Call<List<Vehicle>> call = jsonHerokuapp.getVehicleByIdDriver(id_driver);
 
         //se hace un enqueue
-        call.enqueue(new Callback<Vehicle>() {
+        call.enqueue(new Callback<List<Vehicle>>() {
             @Override
-            public void onResponse(Call<Vehicle> call, Response<Vehicle> response) {
+            public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
                 if (!response.isSuccessful()) {
                     System.out.println("¡Algo ha fallado!");
                     Toast.makeText(UserLogedActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
@@ -214,7 +454,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
 
                 // Almacena en el objeto vehicle el vehículo asociado al conductor actual
-                current_vehicle = response.body();
+                current_vehicle = response.body().get(0);
 
                 if (current_vehicle != null) {
                     id_current_vehicle = current_vehicle.getId_vehicle();
@@ -240,7 +480,7 @@ public class UserLogedActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Vehicle> call, Throwable t) {
+            public void onFailure(Call<List<Vehicle>> call, Throwable t) {
                 Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

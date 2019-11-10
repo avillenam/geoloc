@@ -353,7 +353,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:ems="10"
@@ -382,8 +382,8 @@
 
     <Button
         android:id="@+id/btn_create_vehicle"
-        android:layout_width="139dp"
-        android:layout_height="28dp"
+        android:layout_width="140dp"
+        android:layout_height="33dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
@@ -408,22 +408,23 @@
         android:text="Desenlazar Vehículo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_attach_vehicle"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/btn_attach_vehicle"
+        android:id="@+id/btn_guardar_posicion"
         android:layout_width="187dp"
         android:layout_height="37dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/button_rounded_border"
-        android:text="Enlazar Vehículo"
+        android:text="Guardar localización"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.04" />
+        app:layout_constraintVertical_bias="0.607" />
 
     <Switch
         android:id="@+id/switch1"
@@ -434,7 +435,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.66" />
+        app:layout_constraintVertical_bias="0.732" />
 
     <TextView
         android:id="@+id/textView"
@@ -455,6 +456,41 @@
         android:text="id:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
+
+    <TextView
+        android:id="@+id/txt_longitud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Longitud"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_latitud" />
+
+    <TextView
+        android:id="@+id/txt_direccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Dirección"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_longitud" />
+
+    <TextView
+        android:id="@+id/txt_latitud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Latitud"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.024"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

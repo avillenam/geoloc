@@ -118,7 +118,16 @@ public interface JsonHerokuapp {
 
     // Petición GET para obtener el objeto Vehicle asociado al conductor con id_driver
     @GET("vehicleByIdDriver/{id_driver}")
-    Call<Vehicle> getVehicleByIdDriver(@Path("id_driver") int id_driver);
+    Call<List<Vehicle>> getVehicleByIdDriver(@Path("id_driver") int id_driver);
 
+    // Realiza una petición POST para guardar la posicion del vehículo
+    @FormUrlEncoded
+    @POST("position")
+    Call<LoginCode> vehiclePosition(
+            @Field("id_vehicle") int id_vehicle,
+            @Field("id_driver") int id_driver,
+            @Field("coord_x") double coord_x,
+            @Field("coord_y") double coord_y
+    );
     // Establece relación conductor-vehiculo
 }
