@@ -4,7 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserLogedActivity">
+    tools:context=".Activity_Usuario_Conectado">
+
+    <Button
+        android:id="@+id/btn_mapa"
+        android:layout_width="127dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Ir a Mapa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
+        app:layout_constraintVertical_bias="0.839" />
 
     <TextView
         android:id="@+id/txt_passengers2"
@@ -149,7 +164,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:ems="10"
@@ -170,7 +185,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:ems="10"
@@ -321,10 +336,10 @@
 
     <Button
         android:id="@+id/btn_back"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
+        android:layout_width="82dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginLeft="190dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
@@ -336,10 +351,10 @@
 
     <Button
         android:id="@+id/btn_exit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_rounded_border"
         android:text="Salir"
@@ -367,8 +382,8 @@
 
     <Spinner
         android:id="@+id/spinner_vehicles"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="348dp"
+        android:layout_height="30dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="8dp"
@@ -413,10 +428,10 @@
 
     <Button
         android:id="@+id/btn_guardar_posicion"
-        android:layout_width="187dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
+        android:layout_width="127dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/button_rounded_border"
@@ -424,18 +439,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.607" />
+        app:layout_constraintVertical_bias="0.571" />
 
     <Switch
         android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:text="Comenzar Localización"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintStart_toEndOf="@+id/btn_guardar_posicion"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.732" />
+        app:layout_constraintVertical_bias="0.533" />
 
     <TextView
         android:id="@+id/textView"

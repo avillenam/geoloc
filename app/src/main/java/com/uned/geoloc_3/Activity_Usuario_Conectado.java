@@ -55,12 +55,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UserLogedActivity extends AppCompatActivity {
+public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
     TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers;
     TextView txt_latitud, txt_longitud, txt_direccion;
-    Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion;
+    Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion, btn_mapa;
     Spinner spinner_vehicles;
     Switch switch_start_location;
     private List<Vehicle> vehiclesList;
@@ -106,6 +106,7 @@ public class UserLogedActivity extends AppCompatActivity {
         btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
         btn_deattach_vehicle = (Button) findViewById(R.id.btn_deattach_vehicle);
         btn_guardar_posicion = (Button) findViewById(R.id.btn_guardar_posicion);
+        btn_mapa = (Button) findViewById(R.id.btn_mapa);
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
         switch_start_location = (Switch) findViewById(R.id.switch1);
 
@@ -155,7 +156,7 @@ public class UserLogedActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserLogedActivity.this, MainActivity.class);
+                Intent intent = new Intent(Activity_Usuario_Conectado.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -164,7 +165,7 @@ public class UserLogedActivity extends AppCompatActivity {
         btn_new_vehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(UserLogedActivity.this, "Crear nuevo Vehiculo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, "Crear nuevo Vehiculo", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -172,7 +173,7 @@ public class UserLogedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(UserLogedActivity.this, "Desenlazar Vehiculo del Conductor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, "Desenlazar Vehiculo del Conductor", Toast.LENGTH_SHORT).show();
                 deleteVehicleDriverRelation(id_current_driver);
 
                 vehicleAvailability(id_current_vehicle, true);
@@ -194,7 +195,7 @@ public class UserLogedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (switch_start_location.isChecked()) {
-                    Toast.makeText(UserLogedActivity.this, "Comienza la localización", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Comienza la localización", Toast.LENGTH_SHORT).show();
                     // temporizador cada 5 segundos guarda la posición
                     //http://js.dokry.com/cul-es-el-equivalente-a-un-setinterval-settimeout-de-javascript-en-android-java.html
 
@@ -204,14 +205,14 @@ public class UserLogedActivity extends AppCompatActivity {
                     timer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
-                            new Insertar(UserLogedActivity.this).execute();
+                            new Insertar(Activity_Usuario_Conectado.this).execute();
                             //Log.i("tag", "A Kiss every 5 seconds");
                         }
                     }, 0, segundos * 1000);
 
                 } else {
                     timer.cancel();
-                    Toast.makeText(UserLogedActivity.this, "Para la localización", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Para la localización", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -219,7 +220,7 @@ public class UserLogedActivity extends AppCompatActivity {
         btn_guardar_posicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Insertar(UserLogedActivity.this).execute();
+                new Insertar(Activity_Usuario_Conectado.this).execute();
                 codigo = 0;
             }
         });
@@ -329,7 +330,7 @@ public class UserLogedActivity extends AppCompatActivity {
     private void locationStart() {
         LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Localizacion Local = new Localizacion();
-        Local.setMainActivity(UserLogedActivity.this);
+        Local.setMainActivity(Activity_Usuario_Conectado.this);
         final boolean gpsEnabled = mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!gpsEnabled) {
             Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -341,6 +342,7 @@ public class UserLogedActivity extends AppCompatActivity {
         }
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+
         txt_latitud.setText("Localizacion agregada");
         txt_longitud.setText("");
         txt_direccion.setText("");
@@ -375,13 +377,13 @@ public class UserLogedActivity extends AppCompatActivity {
 
     /* Aqui empieza la Clase Localizacion */
     public class Localizacion implements LocationListener {
-        UserLogedActivity userLogedActivity;
+        Activity_Usuario_Conectado userLogedActivity;
 
-        public UserLogedActivity getMainActivity() {
+        public Activity_Usuario_Conectado getMainActivity() {
             return userLogedActivity;
         }
 
-        public void setMainActivity(UserLogedActivity mainActivity) {
+        public void setMainActivity(Activity_Usuario_Conectado mainActivity) {
             this.userLogedActivity = mainActivity;
         }
 
@@ -446,7 +448,7 @@ public class UserLogedActivity extends AppCompatActivity {
             public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
                 if (!response.isSuccessful()) {
                     System.out.println("¡Algo ha fallado!");
-                    Toast.makeText(UserLogedActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -481,7 +483,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Vehicle>> call, Throwable t) {
-                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -543,7 +545,7 @@ public class UserLogedActivity extends AppCompatActivity {
     }
 
     private void creaSpinnerVehiculos() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserLogedActivity.this, android.R.layout.simple_spinner_item, listVehicles);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Activity_Usuario_Conectado.this, android.R.layout.simple_spinner_item, listVehicles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner_vehicles.setAdapter(adapter);
@@ -571,7 +573,7 @@ public class UserLogedActivity extends AppCompatActivity {
                     id_current_vehicle = id_selected_vehicle;
 
 
-                    Toast.makeText(UserLogedActivity.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_SHORT).show();
                     // Rellenar los TextView con los datos correspondientes del vehículo seleccionado
                     rellenaTxtViewVehicle();
 
@@ -614,13 +616,13 @@ public class UserLogedActivity extends AppCompatActivity {
                 System.out.println(msg);
                 System.out.println("msg: " + msg.getResponse());
                 //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -640,13 +642,13 @@ public class UserLogedActivity extends AppCompatActivity {
                 System.out.println(msg);
                 System.out.println("msg: " + msg.getResponse());
                 //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -668,12 +670,12 @@ public class UserLogedActivity extends AppCompatActivity {
                 System.out.println(msg);
                 System.out.println("msg: " + msg.getResponse());
                 //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -694,7 +696,7 @@ public class UserLogedActivity extends AppCompatActivity {
                 Message msg = response.body();
                 System.out.println("msg: " + msg.getResponse());
                 Log.i("onSuccess", response.body().toString());
-                Toast.makeText(UserLogedActivity.this, msg.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
                 // Borra todos los textview al desenlazar el vehículo actual
                 //borraTxtViewVehicle();
@@ -704,7 +706,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Message> call, Throwable t) {
-                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -750,7 +752,7 @@ public class UserLogedActivity extends AppCompatActivity {
             public void onResponse(Call<List<Driver>> call, Response<List<Driver>> response) {
                 if (!response.isSuccessful()) {
                     System.out.println("¡Algo ha fallado!");
-                    Toast.makeText(UserLogedActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -768,7 +770,7 @@ public class UserLogedActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Driver>> call, Throwable t) {
-                Toast.makeText(UserLogedActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
 

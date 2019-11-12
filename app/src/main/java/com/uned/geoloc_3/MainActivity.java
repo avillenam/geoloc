@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         btoRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                Intent intent = new Intent(MainActivity.this, Activity_Registro.class);
                 startActivity(intent);
                 finish();
             }
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         System.out.println("Usuario introducido Correctamente!!");
                         Toast.makeText(MainActivity.this, "Usuario introducido Correctamente!!", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(MainActivity.this, UserLogedActivity.class);
+                        Intent intent = new Intent(MainActivity.this, Activity_Usuario_Conectado.class);
 
                         // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
                         Bundle userBundle = new Bundle();

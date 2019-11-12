@@ -34,7 +34,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SecondActivity extends AppCompatActivity {
+public class Activity_Registro extends AppCompatActivity {
 
     private JsonHerokuapp jsonHerokuapp;
     Button btn_registry, btn_back, btn_exit;
@@ -78,7 +78,7 @@ public class SecondActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                Intent intent = new Intent(Activity_Registro.this, MainActivity.class);
                 startActivity(intent);
 
             }
@@ -119,7 +119,7 @@ public class SecondActivity extends AppCompatActivity {
         btn_registry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(SecondActivity.this, "Intentando Registrar Driver nuevo: " + et_email.getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Registro.this, "Intentando Registrar Driver nuevo: " + et_email.getText(), Toast.LENGTH_SHORT).show();
 
                 String email = et_email.getText().toString();
                 String pass = et_password.getText().toString();
@@ -240,7 +240,7 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Driver> call, Response<Driver> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(SecondActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Registro.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
                     //System.out.println("Code: " + response.code());
                     return;
                 }
@@ -261,13 +261,13 @@ public class SecondActivity extends AppCompatActivity {
 
                  */
 
-                Toast.makeText(SecondActivity.this, "User: " + postResponse.getEmail() + " registered!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Registro.this, "User: " + postResponse.getEmail() + " registered!", Toast.LENGTH_SHORT).show();
                 System.out.println(content);
             }
 
             @Override
             public void onFailure(Call<Driver> call, Throwable t) {
-                Toast.makeText(SecondActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Registro.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             // come back to the MainActivity
@@ -298,7 +298,7 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Vehicle> call, Response<Vehicle> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(SecondActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Registro.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
                     //System.out.println("Code: " + response.code());
                     return;
                 }
@@ -320,7 +320,7 @@ public class SecondActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Vehicle> call, Throwable t) {
-                Toast.makeText(SecondActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Registro.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 //System.out.println(t.getMessage());
             }
         });

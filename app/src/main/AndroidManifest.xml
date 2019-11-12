@@ -14,8 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".UserLogedActivity"></activity>
-        <activity android:name=".SecondActivity" />
+        <activity android:name=".Activity_Usuario_Conectado"></activity>
+        <activity android:name=".Activity_Registro" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
