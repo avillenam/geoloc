@@ -59,7 +59,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
     TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers;
-    TextView txt_latitud, txt_longitud, txt_direccion;
+    TextView txt_latitud, txt_longitud, txt_direccion, txt_precision;
     Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion, btn_mapa;
     Spinner spinner_vehicles;
     Switch switch_start_location;
@@ -82,12 +82,17 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
     String lat, lon;
     int codigo;
 
+    private LocationManager location;
+    private LocationListener listener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_loged);
 
+
+        location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         txt_emailUSer = (TextView) findViewById(R.id.txt_email2);
         txt_idDriver = (TextView) findViewById(R.id.txt_idDriver2);
@@ -113,6 +118,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_latitud = (TextView) findViewById(R.id.txt_latitud);
         txt_longitud = (TextView) findViewById(R.id.txt_longitud);
         txt_direccion = (TextView) findViewById(R.id.txt_direccion);
+        txt_precision = (TextView) findViewById(R.id.txt_precision);
 
 
         //crea el objeto Retrofit
@@ -206,7 +212,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                         @Override
                         public void run() {
                             new Insertar(Activity_Usuario_Conectado.this).execute();
-                            //Log.i("tag", "A Kiss every 5 seconds");
                         }
                     }, 0, segundos * 1000);
 
@@ -337,7 +342,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             startActivity(settingsIntent);
         }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1000);
             return;
         }
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
@@ -368,6 +373,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
                     txt_direccion.setText(DirCalle.getAddressLine(0));
+                    System.out.println("Accuracy: " + loc.getAccuracy() + " metros");
+                    txt_precision.setText(loc.getAccuracy() + " m");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -400,6 +407,9 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             txt_latitud.setText(lat);
             txt_longitud.setText(lon);
             this.userLogedActivity.setLocation(loc);
+            System.out.println("Accuracy: " + loc.getAccuracy() + " metros");
+            txt_precision.setText(loc.getAccuracy() + " m");
+
         }
 
         @Override
