@@ -43,6 +43,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -79,11 +81,14 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
     Vehicle selected_vehicle = null;
     int id_selected_vehicle;
 
-    String lat, lon;
+    double lat, lon;
+    float accuracy;
+
     int codigo;
 
     private LocationManager location;
     private LocationListener listener;
+
 
 
     @Override
@@ -239,7 +244,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     //Insertamos los datos a nuestro webService a través del objeto HttpPost
     private boolean insertar() {
-        Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, Double.valueOf(lon), Double.valueOf(lat));
+        Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy);
         call.enqueue(new Callback<LoginCode>() {
             @Override
             public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
@@ -251,6 +256,10 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 codigo = loginCode.getCode();
 
                 System.out.println("Código: " + response.code());
+                System.out.println("Código: " + response.toString());
+                System.out.println("Código: " + response.body().toString());
+                System.out.println("call: " + call);
+                System.out.println("call: " + call.request().toString());
                 System.out.println("Código de respuesta: " + loginCode.getCode());
             }
 
@@ -373,8 +382,9 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
                     txt_direccion.setText(DirCalle.getAddressLine(0));
-                    System.out.println("Accuracy: " + loc.getAccuracy() + " metros");
-                    txt_precision.setText(loc.getAccuracy() + " m");
+                    //accuracy = loc.getAccuracy();
+                    //System.out.println("Accuracy: " + accuracy + " metros");
+                    //txt_precision.setText(accuracy + " m");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -401,14 +411,24 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             loc.getLatitude();
             loc.getLongitude();
             //String lat, lon;
-            lat = String.valueOf(loc.getLatitude());
-            lon = String.valueOf(loc.getLongitude());
-            String Text = "Lat = " + lat + "\nLong = " + lat;
-            txt_latitud.setText(lat);
-            txt_longitud.setText(lon);
+            lat = loc.getLatitude();
+            lon = loc.getLongitude();
+            accuracy = loc.getAccuracy();
+
+            // Formateo símbolo decimal
+            DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
+            separadoresPersonalizados.setDecimalSeparator('.');
+
+            //Formateo coordenadas
+            DecimalFormat cf = new DecimalFormat("###.0000", separadoresPersonalizados);
+            txt_latitud.setText(cf.format(lat));
+            txt_longitud.setText(cf.format(lon));
             this.userLogedActivity.setLocation(loc);
-            System.out.println("Accuracy: " + loc.getAccuracy() + " metros");
-            txt_precision.setText(loc.getAccuracy() + " m");
+            //System.out.println("Accuracy: " + accuracy + " metros");
+
+            // Formateo de la precisión a dos decimales
+            DecimalFormat df = new DecimalFormat("#.00", separadoresPersonalizados);
+            txt_precision.setText(df.format(accuracy) + " m");
 
         }
 

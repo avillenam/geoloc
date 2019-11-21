@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".Activity_Usuario_Conectado">
 
+    <TextView
+        android:id="@+id/tv_longitud"
+        android:layout_width="60dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Longitud:"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_latitud" />
+
+    <TextView
+        android:id="@+id/tv_latitud"
+        android:layout_width="60dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Latitud:"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
+
     <Button
         android:id="@+id/btn_mapa"
         android:layout_width="127dp"
@@ -381,18 +408,16 @@
 
     <TextView
         android:id="@+id/tv_accuracy"
-        android:layout_width="158dp"
-        android:layout_height="19dp"
+        android:layout_width="71dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
         android:text="Precisión:"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_latitud"
         app:layout_constraintTop_toBottomOf="@+id/btn_create_vehicle" />
 
     <Spinner
@@ -493,17 +518,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
 
     <TextView
-        android:id="@+id/txt_longitud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Longitud"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_latitud" />
-
-    <TextView
         android:id="@+id/txt_direccion"
         android:layout_width="346dp"
         android:layout_height="47dp"
@@ -520,26 +534,36 @@
     <TextView
         android:id="@+id/txt_latitud"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="Latitud"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.024"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_latitud"
         app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
 
     <TextView
+        android:id="@+id/txt_longitud"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Longitud"
+        app:layout_constraintStart_toEndOf="@+id/tv_longitud"
+        app:layout_constraintTop_toBottomOf="@+id/txt_latitud" />
+
+    <TextView
         android:id="@+id/txt_precision"
-        android:layout_width="108dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:text="Precisión"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.729"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_accuracy" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_accuracy"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create_vehicle" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
