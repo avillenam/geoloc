@@ -27,6 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.uned.geoloc_3.Interface.JsonHerokuapp;
 import com.uned.geoloc_3.Model.Driver;
 import com.uned.geoloc_3.Model.LoginCode;
@@ -83,12 +84,16 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     double lat, lon;
     float accuracy;
+    LatLng currentPoint;
+    LatLng previousPoint = new LatLng(0, 0);
 
     int codigo;
 
     private LocationManager location;
     private LocationListener listener;
 
+    // Frecuencia de actualizacion
+    private static final long UPDATE_INTERVAL = 5000;  // 5 segundos
 
 
     @Override
@@ -135,10 +140,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         //Llamada a la interface
         jsonHerokuapp = retrofit.create(JsonHerokuapp.class);
 
-
         //Obtenemos los datos del conductor enviados a través del Bundle
         Bundle userBundle = this.getIntent().getExtras();
-
         if (userBundle != null) {
             // Recibe del MainActivity el 'email' y el 'id_driver' del conductor conectado
             email = userBundle.getString("email");
@@ -157,13 +160,12 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             getVehicleByIdDriver(id_current_driver);
 
             imprimeEstadoActual("Después de obtener el objeto Driver inicial y el objeto Vehicle asociado");
-
-
         }
 
         // Hace una llamada GET al servidor Node.js solicitando los vehiculos para mostrarlos en el Spinner
         getVehicles();
 
+        // vuelve al MainActivity
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,14 +213,12 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     //http://js.dokry.com/cul-es-el-equivalente-a-un-setinterval-settimeout-de-javascript-en-android-java.html
 
 
-                    Integer segundos = 5;
-
                     timer.scheduleAtFixedRate(new TimerTask() {
                         @Override
                         public void run() {
                             new Insertar(Activity_Usuario_Conectado.this).execute();
                         }
-                    }, 0, segundos * 1000);
+                    }, 0, UPDATE_INTERVAL);
 
                 } else {
                     timer.cancel();
@@ -242,32 +242,74 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         }
     }
 
+    // Funcion que calcula la distancia entre dos puntos LatLng
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        //double meter = valueResult % 1000;
+        double meter = valueResult / 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+        return Radius * c;
+    }
+
     //Insertamos los datos a nuestro webService a través del objeto HttpPost
     private boolean insertar() {
-        Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy);
-        call.enqueue(new Callback<LoginCode>() {
-            @Override
-            public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
-                if (!response.isSuccessful()) {
-                    System.out.println("Código: " + response.code());
-                }
+        if (accuracy <= 20) {
+            System.out.println("currentPoint: " + currentPoint.toString());
+            System.out.println("previousPoint: " + previousPoint.toString());
 
-                LoginCode loginCode = response.body();
-                codigo = loginCode.getCode();
+/*            if ((previousPoint.latitude == 0) & (previousPoint.latitude == 0)) {
+                previousPoint = currentPoint;
+            } else if (CalculationByDistance(currentPoint, previousPoint) >= 3) {*/
+                Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy);
+                call.enqueue(new Callback<LoginCode>() {
+                    @Override
+                    public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
+                        if (!response.isSuccessful()) {
+                            System.out.println("Código: " + response.code());
+                        }
 
-                System.out.println("Código: " + response.code());
-                System.out.println("Código: " + response.toString());
-                System.out.println("Código: " + response.body().toString());
-                System.out.println("call: " + call);
-                System.out.println("call: " + call.request().toString());
-                System.out.println("Código de respuesta: " + loginCode.getCode());
-            }
+                        LoginCode loginCode = response.body();
+                        codigo = loginCode.getCode();
 
-            @Override
-            public void onFailure(Call<LoginCode> call, Throwable t) {
+                        System.out.println("Código: " + response.code());
+                        System.out.println("Código: " + response.toString());
+                        System.out.println("Código: " + response.body().toString());
+                        System.out.println("call: " + call);
+                        System.out.println("call: " + call.request().toString());
+                        System.out.println("Código de respuesta: " + loginCode.getCode());
+                    }
 
-            }
-        });
+                    @Override
+                    public void onFailure(Call<LoginCode> call, Throwable t) {
+
+                    }
+                });
+/*            } else {
+                System.out.println("No se guarda --> El punto no está más alejado de 3m del anterior.");
+                codigo = 0;
+            }*/
+        } else {
+            System.out.println("La precisión es: " + accuracy);
+            codigo = 0;
+        }
 
         if (codigo == 1) {
             System.out.println("return true");
@@ -276,7 +318,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             System.out.println("return false");
             return false;
         }
-
     }
 
         /*
@@ -413,6 +454,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             //String lat, lon;
             lat = loc.getLatitude();
             lon = loc.getLongitude();
+            currentPoint = new LatLng(lat, lon);
+            System.out.println("CurrentPoint Creado: " + currentPoint.toString());
             accuracy = loc.getAccuracy();
 
             // Formateo símbolo decimal
@@ -554,7 +597,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 // Filtrar los que estén disponibles (available=true)
                 vehiclesAvailable = new ArrayList<Vehicle>();
                 listVehicles = new ArrayList<String>();
-                listVehicles.add("Select vehicle");
+                listVehicles.add("Selecciona vehículo");
                 for (Vehicle vehicle : vehiclesList) {
                     if (vehicle.getAvailable() == true) {
                         vehiclesAvailable.add(vehicle);
