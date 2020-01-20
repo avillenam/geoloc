@@ -61,8 +61,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
-    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers;
-    TextView txt_latitud, txt_longitud, txt_direccion, txt_precision;
+    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers, txt_matricula;
+    TextView txt_latitud, txt_longitud, txt_direccion, txt_precision, txt_velocidad;
     Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion, btn_mapa;
     Spinner spinner_vehicles;
     Switch switch_start_location;
@@ -84,6 +84,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     double lat, lon;
     float accuracy;
+    float velocidad;
+    String direccion;
     LatLng currentPoint;
     LatLng previousPoint = new LatLng(0, 0);
 
@@ -115,6 +117,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_brand = (TextView) findViewById(R.id.txt_brand2);
         txt_model = (TextView) findViewById(R.id.txt_model2);
         txt_fuel = (TextView) findViewById(R.id.txt_fuel2);
+        txt_matricula = (TextView) findViewById(R.id.txt_matricula);
         txt_passengers = (TextView) findViewById(R.id.txt_passengers2);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
@@ -129,6 +132,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_longitud = (TextView) findViewById(R.id.txt_longitud);
         txt_direccion = (TextView) findViewById(R.id.txt_direccion);
         txt_precision = (TextView) findViewById(R.id.txt_precision);
+        txt_velocidad = (TextView) findViewById(R.id.txt_speed);
 
 
         //crea el objeto Retrofit
@@ -271,14 +275,16 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     //Insertamos los datos a nuestro webService a través del objeto HttpPost
     private boolean insertar() {
-        if (accuracy <= 20) {
+        if (accuracy <= 100) {
             System.out.println("currentPoint: " + currentPoint.toString());
             System.out.println("previousPoint: " + previousPoint.toString());
 
 /*            if ((previousPoint.latitude == 0) & (previousPoint.latitude == 0)) {
                 previousPoint = currentPoint;
             } else if (CalculationByDistance(currentPoint, previousPoint) >= 3) {*/
-                Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy);
+
+                //TODO: añadir velocidad y address
+                Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy, direccion, velocidad);
                 call.enqueue(new Callback<LoginCode>() {
                     @Override
                     public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
@@ -422,7 +428,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                         loc.getLatitude(), loc.getLongitude(), 1);
                 if (!list.isEmpty()) {
                     Address DirCalle = list.get(0);
-                    txt_direccion.setText(DirCalle.getAddressLine(0));
+                    direccion = DirCalle.getAddressLine(0);
+                    txt_direccion.setText(direccion);
                     //accuracy = loc.getAccuracy();
                     //System.out.println("Accuracy: " + accuracy + " metros");
                     //txt_precision.setText(accuracy + " m");
@@ -449,14 +456,15 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         public void onLocationChanged(Location loc) {
             // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
             // debido a la deteccion de un cambio de ubicacion
-            loc.getLatitude();
-            loc.getLongitude();
+            //loc.getLatitude();
+            //loc.getLongitude();
             //String lat, lon;
             lat = loc.getLatitude();
             lon = loc.getLongitude();
             currentPoint = new LatLng(lat, lon);
             System.out.println("CurrentPoint Creado: " + currentPoint.toString());
             accuracy = loc.getAccuracy();
+            velocidad = loc.getSpeed(); //metros/segundo
 
             // Formateo símbolo decimal
             DecimalFormatSymbols separadoresPersonalizados = new DecimalFormatSymbols();
@@ -472,6 +480,9 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             // Formateo de la precisión a dos decimales
             DecimalFormat df = new DecimalFormat("#.00", separadoresPersonalizados);
             txt_precision.setText(df.format(accuracy) + " m");
+
+            // Obtener la velocidad actual
+            txt_velocidad.setText(df.format(velocidad*3.6) + " km/h");
 
         }
 
@@ -543,6 +554,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
                     // Rellenar los TextView con los datos correspondientes del vehículo asociado al conductor actual
                     txt_idVehicle.setText(String.valueOf(id_current_vehicle));
+                    txt_matricula.setText(current_vehicle.getMatricula());
                     txt_type.setText(current_vehicle.getType());
                     txt_brand.setText(current_vehicle.getBrand());
                     txt_model.setText(current_vehicle.getModel());

@@ -128,7 +128,9 @@ public interface JsonHerokuapp {
             @Field("id_driver") int id_driver,
             @Field("coord_x") double coord_x,
             @Field("coord_y") double coord_y,
-            @Field("accuracy") double accuracy
+            @Field("accuracy") double accuracy,
+            @Field("address") String address,
+            @Field("speed") double speed
     );
     // Establece relación conductor-vehiculo
 }

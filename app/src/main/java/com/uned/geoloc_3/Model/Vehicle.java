@@ -2,6 +2,7 @@ package com.uned.geoloc_3.Model;
 
 public class Vehicle {
     private int id_vehicle;
+    private String matricula;
     private String type;
     private String brand;
     private String model;
@@ -9,7 +10,8 @@ public class Vehicle {
     private String fuel;
     private Boolean available;
 
-    public Vehicle(String type, String brand, String model, int passengers, String fuel, Boolean available) {
+    public Vehicle(String matricula, String type, String brand, String model, int passengers, String fuel, Boolean available) {
+        this.matricula = matricula;
         this.id_vehicle = id_vehicle;
         this.type = type;
         this.brand = brand;
@@ -17,6 +19,10 @@ public class Vehicle {
         this.passengers = passengers;
         this.fuel = fuel;
         this.available = available;
+    }
+
+    public String getMatricula() {
+        return matricula;
     }
 
     public int getId_vehicle() {
@@ -49,10 +55,13 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "id:" + id_vehicle +
-                ", " + type +
-                ", " + brand +
-                ", " + model;
+        return "Vehicle{" +
+                "id_vehicle=" + id_vehicle +
+                ", matricula='" + matricula + '\'' +
+                ", type='" + type + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                '}';
     }
 }
 
