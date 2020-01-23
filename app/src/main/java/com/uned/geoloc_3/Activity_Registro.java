@@ -278,7 +278,8 @@ public class Activity_Registro extends AppCompatActivity {
 
     // Método que realiza la petición POST al servidor para crear un nuevo Vehicle
     private void createVehicle() {
-        Vehicle vehicle = new Vehicle("Car", "Tesla", "S", 5, "Electric", true);
+        Vehicle vehicle = new Vehicle("9660CCR", "Car", "Tesla", "S", 5, "Electric", true);
+
 
         Map<String, String> fields = new HashMap<>();
         fields.put("type", "Car");

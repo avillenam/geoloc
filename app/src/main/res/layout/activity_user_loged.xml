@@ -7,99 +7,6 @@
     tools:context=".Activity_Usuario_Conectado">
 
     <TextView
-        android:id="@+id/tv_speed"
-        android:layout_width="71dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Velocidad:"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/txt_latitud"
-        app:layout_constraintTop_toBottomOf="@+id/btn_create_vehicle" />
-
-    <TextView
-        android:id="@+id/txt_speed"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:text="Velocidad"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tv_accuracy"
-        app:layout_constraintTop_toBottomOf="@+id/btn_create_vehicle" />
-
-    <TextView
-        android:id="@+id/tv_longitud"
-        android:layout_width="60dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Longitud:"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_latitud" />
-
-    <TextView
-        android:id="@+id/tv_latitud"
-        android:layout_width="60dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Latitud:"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
-
-    <Button
-        android:id="@+id/btn_mapa"
-        android:layout_width="127dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded_border"
-        android:text="Ir a Mapa"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_guardar_posicion"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/txt_passengers2"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_fuel2" />
-
-    <TextView
-        android:id="@+id/txt_passengers"
-        android:layout_width="85dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Pasajeros:"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_fuel" />
-
-    <TextView
         android:id="@+id/txt_brand2"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -133,7 +40,8 @@
         android:inputType="text"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_matricula"
+        tools:layout_editor_absoluteY="239dp" />
 
     <TextView
         android:id="@+id/txt_type"
@@ -222,7 +130,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Conductor Conectado"
+        android:text="Usuario Conectado"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
@@ -243,7 +151,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Conductor"
+        android:text="Portador del objeto móvil"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -387,34 +295,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_mobile" />
 
-    <Button
-        android:id="@+id/btn_back"
-        android:layout_width="82dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="190dp"
-        android:layout_marginLeft="190dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded_border"
-        android:text="Volver"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_exit"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_exit"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded_border"
-        android:text="Salir"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_back" />
-
     <TextView
         android:id="@+id/tv_vehicle"
         android:layout_width="99dp"
@@ -426,25 +306,12 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Vehículo:"
+        android:text="Objeto móvil:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_gender2" />
-
-    <TextView
-        android:id="@+id/tv_accuracy"
-        android:layout_width="71dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Precisión:"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/txt_latitud"
-        app:layout_constraintTop_toBottomOf="@+id/tv_speed" />
 
     <Spinner
         android:id="@+id/spinner_vehicles"
@@ -459,23 +326,189 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_passengers2" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_fuel2" />
 
-    <Button
-        android:id="@+id/btn_create_vehicle"
-        android:layout_width="140dp"
-        android:layout_height="33dp"
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/button_rounded_border"
-        android:text="Nuevo Vehículo"
+        android:text="Iniciar registro de posicionamiento"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btn_deattach_vehicle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_guardar_posicion"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.04" />
+        app:layout_constraintVertical_bias="0.767" />
+
+    <Button
+        android:id="@+id/btn_guardar_posicion"
+        android:layout_width="127dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Registrar posición actual"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
+        app:layout_constraintVertical_bias="0.832" />
+
+    <TextView
+        android:id="@+id/txt_direccion"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Dirección"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_longitud" />
+
+    <TextView
+        android:id="@+id/txt_longitud"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:text="Longitud"
+        app:layout_constraintStart_toEndOf="@+id/tv_longitud"
+        app:layout_constraintTop_toBottomOf="@+id/txt_latitud" />
+
+    <TextView
+        android:id="@+id/txt_latitud"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:text="Latitud"
+        app:layout_constraintStart_toEndOf="@+id/tv_latitud"
+        app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="82dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginLeft="190dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Volver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_exit"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_speed"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Velocidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.108"
+        app:layout_constraintStart_toEndOf="@+id/tv_accuracy"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create_vehicle" />
+
+    <TextView
+        android:id="@+id/tv_speed"
+        android:layout_width="71dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Velocidad:"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/txt_latitud"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create_vehicle" />
+
+    <TextView
+        android:id="@+id/txt_precision"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Precisión"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.097"
+        app:layout_constraintStart_toEndOf="@+id/tv_accuracy"
+        app:layout_constraintTop_toBottomOf="@+id/txt_speed" />
+
+    <TextView
+        android:id="@+id/tv_accuracy"
+        android:layout_width="71dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Precisión:"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/txt_latitud"
+        app:layout_constraintTop_toBottomOf="@+id/tv_speed" />
+
+    <Button
+        android:id="@+id/btn_exit"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Salir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_back" />
+
+    <TextView
+        android:id="@+id/tv_longitud"
+        android:layout_width="60dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Longitud:"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_latitud" />
+
+    <TextView
+        android:id="@+id/tv_latitud"
+        android:layout_width="60dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Latitud:"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
 
     <Button
         android:id="@+id/btn_deattach_vehicle"
@@ -492,36 +525,21 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginLeft="60dp"
+    <Button
+        android:id="@+id/btn_create_vehicle"
+        android:layout_width="140dp"
+        android:layout_height="33dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:text="Comenzar Localización"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/button_rounded_border"
+        android:text="Nuevo Vehículo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/btn_guardar_posicion"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_deattach_vehicle"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.646" />
-
-    <Button
-        android:id="@+id/btn_guardar_posicion"
-        android:layout_width="127dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/button_rounded_border"
-        android:text="Guardar localización"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"
-        app:layout_constraintVertical_bias="0.698" />
+        app:layout_constraintVertical_bias="0.038" />
 
     <TextView
         android:id="@+id/textView"
@@ -544,65 +562,55 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_vehicle" />
 
     <TextView
-        android:id="@+id/txt_direccion"
-        android:layout_width="346dp"
-        android:layout_height="47dp"
+        android:id="@+id/txt_matricula"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:text="Dirección"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_longitud" />
-
-    <TextView
-        android:id="@+id/txt_latitud"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Latitud"
-        app:layout_constraintStart_toEndOf="@+id/tv_latitud"
-        app:layout_constraintTop_toBottomOf="@+id/btn_deattach_vehicle" />
-
-    <TextView
-        android:id="@+id/txt_longitud"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="Longitud"
-        app:layout_constraintStart_toEndOf="@+id/tv_longitud"
-        app:layout_constraintTop_toBottomOf="@+id/txt_latitud" />
-
-    <TextView
-        android:id="@+id/txt_precision"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:text="Precisión"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tv_accuracy"
-        app:layout_constraintTop_toBottomOf="@+id/txt_speed" />
-
-    <TextView
-        android:id="@+id/txt_matricula"
-        android:layout_width="253dp"
-        android:layout_height="24dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
         android:text="TextView"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/txt_idVehicle2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/tv_vehicle"
-        app:layout_constraintTop_toBottomOf="@+id/txt_gender2" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_gender2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_intervalo"
+        android:layout_width="0dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginRight="160dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Intervalo de registro en segundos:"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/switch1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_direccion"
+        app:layout_constraintVertical_bias="0.444" />
+
+    <Spinner
+        android:id="@+id/spinner_time"
+        android:layout_width="0dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/switch1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_intervalo"
+        app:layout_constraintTop_toBottomOf="@+id/txt_direccion"
+        app:layout_constraintVertical_bias="0.444" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

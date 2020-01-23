@@ -61,15 +61,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
-    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_passengers, txt_matricula;
+    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_matricula;
     TextView txt_latitud, txt_longitud, txt_direccion, txt_precision, txt_velocidad;
-    Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion, btn_mapa;
-    Spinner spinner_vehicles;
+    Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion;
+    Spinner spinner_vehicles, spinner_time;
     Switch switch_start_location;
     private List<Vehicle> vehiclesList;
     private List<Vehicle> vehiclesAvailable;
     private List<String> listVehicles;
     private JsonHerokuapp jsonHerokuapp;
+    String[] time_seconds;
+
 
     // Conductor actual
     Driver current_driver = null;
@@ -118,14 +120,13 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_model = (TextView) findViewById(R.id.txt_model2);
         txt_fuel = (TextView) findViewById(R.id.txt_fuel2);
         txt_matricula = (TextView) findViewById(R.id.txt_matricula);
-        txt_passengers = (TextView) findViewById(R.id.txt_passengers2);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
         btn_deattach_vehicle = (Button) findViewById(R.id.btn_deattach_vehicle);
         btn_guardar_posicion = (Button) findViewById(R.id.btn_guardar_posicion);
-        btn_mapa = (Button) findViewById(R.id.btn_mapa);
         spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
+        spinner_time = (Spinner) findViewById(R.id.spinner_time);
         switch_start_location = (Switch) findViewById(R.id.switch1);
 
         txt_latitud = (TextView) findViewById(R.id.txt_latitud);
@@ -134,6 +135,11 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_precision = (TextView) findViewById(R.id.txt_precision);
         txt_velocidad = (TextView) findViewById(R.id.txt_speed);
 
+
+        time_seconds = getResources().getStringArray(R.array.time_interval);
+        ArrayAdapter<String> interval_adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, time_seconds);
+        interval_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_time.setAdapter(interval_adapter);
 
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -216,13 +222,25 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     // temporizador cada 5 segundos guarda la posición
                     //http://js.dokry.com/cul-es-el-equivalente-a-un-setinterval-settimeout-de-javascript-en-android-java.html
 
+                    String update_interval = spinner_time.getSelectedItem().toString();
+                    System.out.println("update_interval: " + update_interval);
+                    System.out.println("tipo update_interval: " + update_interval.getClass().getName());
 
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            new Insertar(Activity_Usuario_Conectado.this).execute();
-                        }
-                    }, 0, UPDATE_INTERVAL);
+                    if (update_interval != null) {
+                        Integer interval = Integer.parseInt(update_interval);
+                        interval = interval * 1000;
+                        System.out.println("interval: " + interval);
+                        System.out.println("tipo interval: " + interval.getClass().getName());
+
+                        timer.scheduleAtFixedRate(new TimerTask() {
+                            @Override
+                            public void run() {
+                                new Insertar(Activity_Usuario_Conectado.this).execute();
+                            }
+                        }, 0, interval);
+                    } else {
+                        Toast.makeText(Activity_Usuario_Conectado.this, "¡No has seleccionado intervalo de tiempo!", Toast.LENGTH_LONG).show();
+                    }
 
                 } else {
                     timer.cancel();
@@ -283,31 +301,31 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 previousPoint = currentPoint;
             } else if (CalculationByDistance(currentPoint, previousPoint) >= 3) {*/
 
-                //TODO: añadir velocidad y address
-                Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy, direccion, velocidad);
-                call.enqueue(new Callback<LoginCode>() {
-                    @Override
-                    public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
-                        if (!response.isSuccessful()) {
-                            System.out.println("Código: " + response.code());
-                        }
-
-                        LoginCode loginCode = response.body();
-                        codigo = loginCode.getCode();
-
+            //TODO: añadir velocidad y address
+            Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy, direccion, velocidad);
+            call.enqueue(new Callback<LoginCode>() {
+                @Override
+                public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {
+                    if (!response.isSuccessful()) {
                         System.out.println("Código: " + response.code());
-                        System.out.println("Código: " + response.toString());
-                        System.out.println("Código: " + response.body().toString());
-                        System.out.println("call: " + call);
-                        System.out.println("call: " + call.request().toString());
-                        System.out.println("Código de respuesta: " + loginCode.getCode());
                     }
 
-                    @Override
-                    public void onFailure(Call<LoginCode> call, Throwable t) {
+                    LoginCode loginCode = response.body();
+                    codigo = loginCode.getCode();
 
-                    }
-                });
+                    System.out.println("Código: " + response.code());
+                    System.out.println("Código: " + response.toString());
+                    System.out.println("Código: " + response.body().toString());
+                    System.out.println("call: " + call);
+                    System.out.println("call: " + call.request().toString());
+                    System.out.println("Código de respuesta: " + loginCode.getCode());
+                }
+
+                @Override
+                public void onFailure(Call<LoginCode> call, Throwable t) {
+
+                }
+            });
 /*            } else {
                 System.out.println("No se guarda --> El punto no está más alejado de 3m del anterior.");
                 codigo = 0;
@@ -482,7 +500,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             txt_precision.setText(df.format(accuracy) + " m");
 
             // Obtener la velocidad actual
-            txt_velocidad.setText(df.format(velocidad*3.6) + " km/h");
+            txt_velocidad.setText(df.format(velocidad * 3.6) + " km/h");
 
         }
 
@@ -532,15 +550,18 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
                 if (!response.isSuccessful()) {
                     System.out.println("¡Algo ha fallado!");
-                    Toast.makeText(Activity_Usuario_Conectado.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Code: " + response.code(), Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 imprimeEstadoActual("Antes de getVehicleByIdDriver");
 
-
-                // Almacena en el objeto vehicle el vehículo asociado al conductor actual
-                current_vehicle = response.body().get(0);
+                List<Vehicle> respuesta = new ArrayList<Vehicle>();
+                respuesta = response.body();
+                if (respuesta.size() != 0) {
+                    // Almacena en el objeto vehicle el vehículo asociado al conductor actual
+                    current_vehicle = response.body().get(0);
+                }
 
                 if (current_vehicle != null) {
                     id_current_vehicle = current_vehicle.getId_vehicle();
@@ -559,9 +580,15 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     txt_brand.setText(current_vehicle.getBrand());
                     txt_model.setText(current_vehicle.getModel());
                     txt_fuel.setText(current_vehicle.getFuel());
-                    txt_passengers.setText(String.valueOf(current_vehicle.getPassengers()));
+                } else {
+                    // Rellenar los TextView con los datos vacios
+                    txt_idVehicle.setText("");
+                    txt_matricula.setText("");
+                    txt_type.setText("");
+                    txt_brand.setText("");
+                    txt_model.setText("");
+                    txt_fuel.setText("");
                 }
-
                 imprimeEstadoActual("Después de getVehicleByIdDriver");
 
             }
@@ -807,7 +834,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_brand.setText("");
         txt_model.setText("");
         txt_fuel.setText("");
-        txt_passengers.setText("");
     }
 
     private void rellenaTxtViewVehicle() {
@@ -818,7 +844,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             txt_brand.setText(current_vehicle.getBrand());
             txt_model.setText(current_vehicle.getModel());
             txt_fuel.setText(current_vehicle.getFuel());
-            txt_passengers.setText(String.valueOf(current_vehicle.getPassengers()));
         }
 
     }
