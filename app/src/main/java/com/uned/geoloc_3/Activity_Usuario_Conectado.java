@@ -636,7 +636,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 // Filtrar los que estén disponibles (available=true)
                 vehiclesAvailable = new ArrayList<Vehicle>();
                 listVehicles = new ArrayList<String>();
-                listVehicles.add("Selecciona vehículo");
+                listVehicles.add("Selecciona objeto");
                 for (Vehicle vehicle : vehiclesList) {
                     if (vehicle.getAvailable() == true) {
                         vehiclesAvailable.add(vehicle);

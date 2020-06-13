@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// Tutorial Bcrypt para Android https://www.youtube.com/watch?v=Zua2BjFB5UI
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -140,6 +142,21 @@ public class Activity_Registro extends AppCompatActivity {
                 System.out.println(genre);
 
                  */
+
+                // Comprobación de los dátos obligatorios
+                if (email.isEmpty() || name.isEmpty() || pass.isEmpty()) {
+                    Toast.makeText(Activity_Registro.this, "Rellena los campos obligatorios.", Toast.LENGTH_SHORT).show();
+                } else {
+                    String hashPassword = "12345";
+                    String bcryptHashString = BCrypt.withDefaults().hashToString(10, hashPassword.toCharArray());
+
+                    BCrypt.Result result = BCrypt.verifyer().verify(pass.toCharArray(), bcryptHashString);
+                    if (result.verified) {
+                        Toast.makeText(Activity_Registro.this, "Contraseña introducida generada correctamente.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(Activity_Registro.this, "Contraseña no generada correctamente.", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
                 //Realiza una consulta POST para registrar un nuevo Driver
                 createDriver(email, pass, name, surname, birthdate, genre, mobile_phone);
@@ -261,7 +278,7 @@ public class Activity_Registro extends AppCompatActivity {
 
                  */
 
-                Toast.makeText(Activity_Registro.this, "User: " + postResponse.getEmail() + " registered!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Registro.this, "¡Usuario: " + postResponse.getEmail() + " registrado!", Toast.LENGTH_SHORT).show();
                 System.out.println(content);
             }
 

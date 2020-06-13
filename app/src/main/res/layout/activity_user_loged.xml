@@ -130,7 +130,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Usuario Conectado"
+        android:text="Panel de Control"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"

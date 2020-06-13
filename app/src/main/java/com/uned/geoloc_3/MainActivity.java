@@ -13,10 +13,14 @@ import com.uned.geoloc_3.Interface.JsonHerokuapp;
 import com.uned.geoloc_3.Model.Driver;
 import com.uned.geoloc_3.Model.LoginCode;
 
+// Tutorial Bcrypt para Android https://www.youtube.com/watch?v=Zua2BjFB5UI
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
         btn_exit = (Button) findViewById(R.id.btn_exit);
         et_email = (EditText) findViewById(R.id.txt_email2);
         et_password = (EditText) findViewById(R.id.et_password);
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
 
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -66,9 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 //Make GET request for login user
                 loginUser(email, pass);
 
-                //obtieneDrivers();
-                //obtieneDriver();
-                //loginUser();
             }
         });
 

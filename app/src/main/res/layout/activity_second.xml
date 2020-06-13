@@ -202,7 +202,7 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Registrar Conductor"
+        android:text="Registrar Nuevo Usuario"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
