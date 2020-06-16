@@ -34,16 +34,7 @@ import com.uned.geoloc_3.Model.LoginCode;
 import com.uned.geoloc_3.Model.Message;
 import com.uned.geoloc_3.Model.Vehicle;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -105,7 +96,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_loged);
 
-
         location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         txt_emailUSer = (TextView) findViewById(R.id.txt_email2);
@@ -144,6 +134,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://avillena-pfg.herokuapp.com/")
+//                .baseUrl("http:192.168.1.72:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -297,11 +288,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             System.out.println("currentPoint: " + currentPoint.toString());
             System.out.println("previousPoint: " + previousPoint.toString());
 
-/*            if ((previousPoint.latitude == 0) & (previousPoint.latitude == 0)) {
-                previousPoint = currentPoint;
-            } else if (CalculationByDistance(currentPoint, previousPoint) >= 3) {*/
-
-            //TODO: añadir velocidad y address
             Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy, direccion, velocidad);
             call.enqueue(new Callback<LoginCode>() {
                 @Override
@@ -326,10 +312,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
                 }
             });
-/*            } else {
-                System.out.println("No se guarda --> El punto no está más alejado de 3m del anterior.");
-                codigo = 0;
-            }*/
         } else {
             System.out.println("La precisión es: " + accuracy);
             codigo = 0;
@@ -344,34 +326,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         }
     }
 
-        /*
-        HttpClient httpClient;
-        List<NameValuePair> nameValuePairs;
-        HttpPost httpPost;
-        httpClient = new DefaultHttpClient();
-        httpPost = new HttpPost("https://avillena-pfg.herokuapp.com/position");//url del servidor
-        //empezamos a añadir nuestros datos
-        nameValuePairs = new ArrayList<NameValuePair>(4);
-        nameValuePairs.add(new BasicNameValuePair("id_vehicle", "2"));
-        nameValuePairs.add(new BasicNameValuePair("id_driver", "1"));
-        nameValuePairs.add(new BasicNameValuePair("coord_y", txt_latitud.getText().toString().trim()));
-        nameValuePairs.add(new BasicNameValuePair("coord_x", txt_longitud.getText().toString().trim()));
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-            httpClient.execute(httpPost);
-            return true;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-
-         */
-
-
     //AsyncTask para insertar Datos
     class Insertar extends AsyncTask<String, String, String> {
         private Activity context;
@@ -381,12 +335,10 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         }
 
         protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
             if (insertar())
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO Auto-generated method stub
                         Toast.makeText(context, "Dato insertado con éxito", Toast.LENGTH_LONG).show();
                         txt_latitud.setText("");
                         txt_longitud.setText("");
@@ -397,8 +349,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO Auto-generated method stub
-                        Toast.makeText(context, "Datos no insertado con éxito", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Dato no insertado con éxito\nSe ha de asociar un objeto al portador.", Toast.LENGTH_LONG).show();
                     }
                 });
             return null;
@@ -448,9 +399,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     Address DirCalle = list.get(0);
                     direccion = DirCalle.getAddressLine(0);
                     txt_direccion.setText(direccion);
-                    //accuracy = loc.getAccuracy();
-                    //System.out.println("Accuracy: " + accuracy + " metros");
-                    //txt_precision.setText(accuracy + " m");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -473,10 +421,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location loc) {
             // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
-            // debido a la deteccion de un cambio de ubicacion
-            //loc.getLatitude();
-            //loc.getLongitude();
-            //String lat, lon;
+            // debido a la detección de un cambio de ubicacion
             lat = loc.getLatitude();
             lon = loc.getLongitude();
             currentPoint = new LatLng(lat, lon);
@@ -493,7 +438,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             txt_latitud.setText(cf.format(lat));
             txt_longitud.setText(cf.format(lon));
             this.userLogedActivity.setLocation(loc);
-            //System.out.println("Accuracy: " + accuracy + " metros");
 
             // Formateo de la precisión a dos decimales
             DecimalFormat df = new DecimalFormat("#.00", separadoresPersonalizados);
@@ -535,7 +479,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     private void imprimeEstadoActual(String msg) {
         System.out.println("Estado Actual:");
-        System.out.println("msg:" + msg);
+        System.out.println("msg imprimeEstadoActual:" + msg);
         System.out.println("id_current_driver:" + id_current_driver);
         System.out.println("id_current_vehicle:" + id_current_vehicle);
         System.out.println("id_selected_vehicle:" + id_selected_vehicle);
@@ -544,7 +488,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
     private void getVehicleByIdDriver(int id_driver) {
         Call<List<Vehicle>> call = jsonHerokuapp.getVehicleByIdDriver(id_driver);
 
-        //se hace un enqueue
+        //Hace un enqueue
         call.enqueue(new Callback<List<Vehicle>>() {
             @Override
             public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
@@ -628,7 +572,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
                 imprimeEstadoActual("Antes de getVehicles");
 
-
                 //almacenamos la respuesta en una lista. Ya estan pareseados al haber usado un converter (GSON)
                 vehiclesList = new ArrayList<Vehicle>();
                 vehiclesList = response.body();
@@ -672,7 +615,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     selected_vehicle = vehiclesAvailable.get(position - 1);
                     id_selected_vehicle = selected_vehicle.getId_vehicle();
 
-
                     if ((current_vehicle != null) && (id_current_vehicle != 0)) {
                         deleteVehicleDriverRelation(id_current_driver);
                         vehicleAvailability(id_current_vehicle, true);
@@ -684,21 +626,9 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     current_vehicle = selected_vehicle;
                     id_current_vehicle = id_selected_vehicle;
 
-
                     Toast.makeText(Activity_Usuario_Conectado.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_SHORT).show();
                     // Rellenar los TextView con los datos correspondientes del vehículo seleccionado
                     rellenaTxtViewVehicle();
-
-                    /*
-                    txt_idVehicle.setText(String.valueOf(selected_vehicle.getId_vehicle()));
-                    txt_type.setText(selected_vehicle.getType());
-                    txt_brand.setText(selected_vehicle.getBrand());
-                    txt_model.setText(selected_vehicle.getModel());
-                    txt_fuel.setText(selected_vehicle.getFuel());
-                    txt_passengers.setText(String.valueOf(selected_vehicle.getPassengers()));
-
-                     */
-
 
                     driverAvailability(id_current_driver, false);
                     vehicleAvailability(id_current_vehicle, false);
@@ -720,15 +650,15 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             public void onResponse(Call<Message> call, Response<Message> response) {
                 // si no es satisfactoria la respuesta, muestra un mensaje con el error
                 if (!response.isSuccessful()) {
-                    System.out.println("Código: " + response.code());
+                    System.out.println("Código vehicleAvailability: " + response.code());
                 }
 
                 Message msg = response.body();
                 System.out.println(response);
                 System.out.println(msg);
-                System.out.println("msg: " + msg.getResponse());
+                System.out.println("msg vehicleAvailability: " + msg.getResponse());
                 //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -746,15 +676,14 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             public void onResponse(Call<Message> call, Response<Message> response) {
                 // si no es satisfactoria la respuesta, muestra un mensaje con el error
                 if (!response.isSuccessful()) {
-                    System.out.println("Código: " + response.code());
+                    System.out.println("Código driverAvailability: " + response.code());
                 }
 
                 Message msg = response.body();
                 System.out.println(response);
                 System.out.println(msg);
-                System.out.println("msg: " + msg.getResponse());
-                //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
+                System.out.println("msg driverAvailability: " + msg.getResponse());
+                //Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -774,15 +703,15 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             public void onResponse(Call<Message> call, Response<Message> response) {
                 // si no es satisfactoria la respuesta, muestra un mensaje con el error
                 if (!response.isSuccessful()) {
-                    System.out.println("Código: " + response.code());
+                    System.out.println("Código driverVehicleRelation: " + response.code());
                 }
 
                 Message msg = response.body();
-                System.out.println(response);
-                System.out.println(msg);
-                System.out.println("msg: " + msg.getResponse());
+                System.out.println("response driverVehicleRelation: " + response);
+                System.out.println("msg driverVehicleRelation:" + msg);
+                //System.out.println("msg.getResponse() driverVehicleRelation: " + msg.getResponse());
                 //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, msg.getResponse().toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -801,19 +730,18 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             public void onResponse(Call<Message> call, Response<Message> response) {
                 // si no es satisfactoria la respuesta, muestra un mensaje con el error
                 if (!response.isSuccessful()) {
-                    System.out.println("Código: " + response.code());
+                    System.out.println("Código deleteVehicleDriverRelation: " + response.code());
                 }
 
                 //Message msg = response.body();
                 Message msg = response.body();
-                System.out.println("msg: " + msg.getResponse());
+//                System.out.println("msg: " + msg.getResponse());
+                System.out.println("response: " + response);
+                System.out.println("response.body(): " + response.body());
+                System.out.println("response.body().toString(): " + response.body().toString());
+                System.out.println("msg respuesta deleteVehicleDriverRelation: " + msg.getResponse());
                 Log.i("onSuccess", response.body().toString());
                 Toast.makeText(Activity_Usuario_Conectado.this, msg.toString(), Toast.LENGTH_SHORT).show();
-
-                // Borra todos los textview al desenlazar el vehículo actual
-                //borraTxtViewVehicle();
-
-
             }
 
             @Override

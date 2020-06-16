@@ -14,22 +14,14 @@ import android.widget.Toast;
 
 import com.uned.geoloc_3.Interface.JsonHerokuapp;
 import com.uned.geoloc_3.Model.Driver;
+import com.uned.geoloc_3.Model.RegistryCode;
 import com.uned.geoloc_3.Model.Vehicle;
 
-/*
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
- */
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// Tutorial Bcrypt para Android https://www.youtube.com/watch?v=Zua2BjFB5UI
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +53,6 @@ public class Activity_Registro extends AppCompatActivity {
         et_surname = (EditText) findViewById(R.id.et_surname);
         et_birthdate = (EditText) findViewById(R.id.et_birthdate);
         et_mobile_phone = (EditText) findViewById(R.id.et_mobile_phone);
-        //spinner_vehicle = (Spinner) findViewById(R.id.spinner_vehicle);
 
         generos = getResources().getStringArray(R.array.genero);
         ArrayAdapter<String> gender_adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, generos);
@@ -71,6 +62,7 @@ public class Activity_Registro extends AppCompatActivity {
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://avillena-pfg.herokuapp.com/")
+//                .baseUrl("http:192.168.1.72:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -86,43 +78,13 @@ public class Activity_Registro extends AppCompatActivity {
             }
         });
 
-
-        // Hace una llamada GET al servidor Node.js solicitando los vehiculos
-        //getVehicles();
-
-        //Conexion a la BD POstgresql
-        //sqlThread.start();
-
-
         //Rellena el spinner después de hacer la consulta GET getVehicles() al servidor
         ArrayAdapter<String> vehicleArrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, vehiclesString);
         vehicleArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //spinner_vehicle.setAdapter(vehicleArrayAdapter);
-
-
-        /*
-        spinner_vehicle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String vehicle = (String) parent.getSelectedItem();
-                displayVehicleData(vehicle);
-                System.out.println("Id vehiculo seleccionado: " + vehicle);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-         */
-
 
         btn_registry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Activity_Registro.this, "Intentando Registrar Driver nuevo: " + et_email.getText(), Toast.LENGTH_SHORT).show();
-
                 String email = et_email.getText().toString();
                 String pass = et_password.getText().toString();
                 String name = et_name.getText().toString();
@@ -131,45 +93,18 @@ public class Activity_Registro extends AppCompatActivity {
                 int mobile_phone = Integer.valueOf(et_mobile_phone.getText().toString());
                 String genre = spinner_genre.getSelectedItem().toString();
 
-                /*
-                System.out.println("elementos capturados de la APP");
-                System.out.println(email);
-                System.out.println(pass);
-                System.out.println(name);
-                System.out.println(surname);
-                System.out.println(birthdate);
-                System.out.println(mobile_phone);
-                System.out.println(genre);
-
-                 */
-
                 // Comprobación de los dátos obligatorios
                 if (email.isEmpty() || name.isEmpty() || pass.isEmpty()) {
-                    Toast.makeText(Activity_Registro.this, "Rellena los campos obligatorios.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Registro.this, "Rellena los campos obligatorios.", Toast.LENGTH_LONG).show();
                 } else {
-                    String hashPassword = "12345";
-                    String bcryptHashString = BCrypt.withDefaults().hashToString(10, hashPassword.toCharArray());
-
-                    BCrypt.Result result = BCrypt.verifyer().verify(pass.toCharArray(), bcryptHashString);
-                    if (result.verified) {
-                        Toast.makeText(Activity_Registro.this, "Contraseña introducida generada correctamente.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(Activity_Registro.this, "Contraseña no generada correctamente.", Toast.LENGTH_SHORT).show();
-                    }
+                    //Realiza una consulta POST para registrar un nuevo Driver
+                    createDriver(email, pass, name, surname, birthdate, genre, mobile_phone);
                 }
-
-                //Realiza una consulta POST para registrar un nuevo Driver
-                createDriver(email, pass, name, surname, birthdate, genre, mobile_phone);
-
-                //Realiza la consulta INSERT en la BD
-                //makeRequestDB("SELECT * FROM drivers");
-
             }
 
         });
 
-
-        // cerrar de la Activity
+        // Cerrar el Activity
         btn_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,7 +116,7 @@ public class Activity_Registro extends AppCompatActivity {
     private void getVehicles() {
         Call<List<Vehicle>> call = jsonHerokuapp.getVehicles();
 
-        //se hace un enqueue
+        // Hace un enqueue
         call.enqueue(new Callback<List<Vehicle>>() {
             @Override
             public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
@@ -193,7 +128,7 @@ public class Activity_Registro extends AppCompatActivity {
 
                 Log.i("onSuccess", response.body().toString());
 
-                //almacenamos la respuesta en una lista. Ya estan pareseados al haber usado un converter (GSON)
+                //almacena la respuesta en una lista. Ya estan pareseados al haber usado un converter (GSON)
                 vehiclesList = new ArrayList<Vehicle>();
                 vehiclesList = response.body();
                 vehiclesString = new ArrayList<String>();
@@ -224,71 +159,64 @@ public class Activity_Registro extends AppCompatActivity {
         System.out.println(email);
         System.out.println(password);
         System.out.println(name);
-        //System.out.println(surname);
-        //System.out.println(birthdate);
-        //System.out.println(mobile_number);
-        //System.out.println(genre);
 
         System.out.println("Objeto creado:");
         System.out.println(driver.getEmail());
         System.out.println(driver.getPassword());
         System.out.println(driver.getName());
 
+        Call<RegistryCode> call = jsonHerokuapp.createDriver(driver);
 
-        /*
-        Map<String, String> fields = new HashMap<>();
-        fields.put("email", email);
-        fields.put("password", password);
-        fields.put("name", name);
-        fields.put("surname", surname);
-        fields.put("birthdate", birthdate);
-        fields.put("genre", genre);
-        fields.put("mobile_number", String.valueOf(mobile_number));
-        fields.put("available", "true");
-
-         */
-
-        Call<Driver> call = jsonHerokuapp.createDriver(driver);
-        //Call<Vehicle> call = jsonHerokuapp.createVehicle("Car", "Tesla", "S", 5, "Electric", true);
-        //Call<Driver> call = jsonHerokuapp.createDriver(fields);
-
-
-        call.enqueue(new Callback<Driver>() {
+        call.enqueue(new Callback<RegistryCode>() {
             @Override
-            public void onResponse(Call<Driver> call, Response<Driver> response) {
+            public void onResponse(Call<RegistryCode> call, Response<RegistryCode> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(Activity_Registro.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                    //System.out.println("Code: " + response.code());
                     return;
                 }
 
-                Driver postResponse = response.body();
+                RegistryCode postResponse = response.body();
+                int codigo = postResponse.getCode();
+                int id_driver = postResponse.getId_driver();
+                String message = postResponse.getMessage();
+                System.out.println(codigo);
+                System.out.println(id_driver);
+                System.out.println(message);
+                // code=0 Si el usuario ya existe en el sistema
+                // code=1 Usuario registrado correctamente
+                // code=2 Error de formato
+                switch (codigo) {
+                    case 0: //Si el usuario ya existe en el sistema
+                        System.out.println("El usuario introducido ya existe en el sistema. Inicie sesión");
+                        Toast.makeText(Activity_Registro.this, "El usuario introducido ya existe en el sistema. Inicie sesión", Toast.LENGTH_LONG).show();
+                        break;
+                    case 1: //Usuario registrado correctamente
+                        System.out.println("Usuario registrado Correctamente!!");
+                        Toast.makeText(Activity_Registro.this, "Usuario registrado Correctamente!!", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Activity_Registro.this, MainActivity.class);
 
-                String content = "";
-                content += "Code: " + response.code() + "\n";
-                content += "email: " + postResponse.getEmail() + "\n";
-                content += "password: " + postResponse.getPassword() + "\n";
-                content += "name: " + postResponse.getName() + "\n";
-                /*
-                content += "surname: " + postResponse.getSurname() + "\n";
-                content += "birthdate: " + postResponse.getBirthdate() + "\n";
-                content += "genre: " + postResponse.getGenre() + "\n";
-                content += "mobile_number: " + postResponse.getMobile_number() + "\n";
-                content += "Available: " + postResponse.getAvailable() + "\n\n";
+                        // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
+                        Bundle userBundle = new Bundle();
+                        userBundle.putInt("id_driver", id_driver);
 
-                 */
+                        // Le añadimos al Intent los datos que queremos enviar
+                        intent.putExtras(userBundle);
 
-                Toast.makeText(Activity_Registro.this, "¡Usuario: " + postResponse.getEmail() + " registrado!", Toast.LENGTH_SHORT).show();
-                System.out.println(content);
+                        startActivity(intent);
+
+                        break;
+                    case 2: //Error de formato
+                        System.out.println("Hay algún error al introducir los datos");
+                        Toast.makeText(Activity_Registro.this, "Hay algún error al introducir los datos. Prueba de nuevo", Toast.LENGTH_LONG).show();
+                        break;
+                }
+
             }
 
             @Override
-            public void onFailure(Call<Driver> call, Throwable t) {
+            public void onFailure(Call<RegistryCode> call, Throwable t) {
                 Toast.makeText(Activity_Registro.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
-            // come back to the MainActivity
-            //TODO: volver al MainActivity
         });
     }
 
@@ -306,9 +234,6 @@ public class Activity_Registro extends AppCompatActivity {
         fields.put("fuel", "Gas");
         fields.put("available", "true");
 
-
-        //Call<Vehicle> call = jsonHerokuapp.createVehicle(vehicle);
-        //Call<Vehicle> call = jsonHerokuapp.createVehicle("Car", "Tesla", "S", 5, "Electric", true);
         Call<Vehicle> call = jsonHerokuapp.createVehicle(fields);
 
 
@@ -317,7 +242,6 @@ public class Activity_Registro extends AppCompatActivity {
             public void onResponse(Call<Vehicle> call, Response<Vehicle> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(Activity_Registro.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                    //System.out.println("Code: " + response.code());
                     return;
                 }
 
@@ -339,11 +263,9 @@ public class Activity_Registro extends AppCompatActivity {
             @Override
             public void onFailure(Call<Vehicle> call, Throwable t) {
                 Toast.makeText(Activity_Registro.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                //System.out.println(t.getMessage());
             }
         });
     }
-
 
     // captura el vehiculo seleccionado
     public void getSelectedVehicle(View v) {
@@ -354,41 +276,4 @@ public class Activity_Registro extends AppCompatActivity {
     public void displayVehicleData(String vehicle) {
         Toast.makeText(this, vehicle, Toast.LENGTH_LONG).show();
     }
-
-
-    /*Conexión a la BD Postgres alojada en HEROKU*/
-    //Función que se conecta a la BD y realiza una consulta
-    /*
-    public void makeRequestDB(String req) {
-        final String request = req;
-        Thread sqlThread = new Thread() {
-            public void run() {
-                try {
-                    Class.forName("org.postgresql.Driver");
-                    // "jdbc:postgresql://IP:PUERTO/DB", "USER", "PASSWORD");
-                    // Si estás utilizando el emulador de android y tenes el PostgreSQL en tu misma PC no utilizar 127.0.0.1 o localhost como IP, utilizar 10.0.2.2
-                    Connection conn = DriverManager.getConnection(
-                            "jdbc:postgresql://ec2-107-20-173-2.compute-1.amazonaws.com:5432/d2346t6en0926l", "wzkowhhekyvcbh", "dbc37ca58c23fa2edf7ed4af8319e00316de9aaf1defbb8cac1fd86500704f6a");
-                    //En el stsql se puede agregar cualquier consulta SQL deseada.
-                    //String stsql = "Select version()";
-                    String stsql = request;
-                    Statement st = conn.createStatement();
-                    ResultSet rs = st.executeQuery(stsql);
-                    rs.next();
-                    System.out.println("CONSULTA EXITOSA!! --> ");
-                    System.out.println("email: " + rs.getString(2));
-                    System.out.println(rs.getString(3));
-
-                    conn.close();
-                } catch (SQLException se) {
-                    System.out.println("oops! No se puede conectar. Error: " + se.toString());
-                } catch (ClassNotFoundException e) {
-                    System.out.println("oops! No se encuentra la clase. Error: " + e.getMessage());
-                }
-            }
-        };
-        sqlThread.start();
-    }
-
-     */
 }

@@ -3,6 +3,7 @@ package com.uned.geoloc_3.Interface;
 import com.uned.geoloc_3.Model.Driver;
 import com.uned.geoloc_3.Model.LoginCode;
 import com.uned.geoloc_3.Model.Message;
+import com.uned.geoloc_3.Model.RegistryCode;
 import com.uned.geoloc_3.Model.Vehicle;
 
 import java.util.List;
@@ -66,12 +67,14 @@ public interface JsonHerokuapp {
     @POST("driver")
     Call<Driver> createDriver(@FieldMap Map<String, String> fields);
 
-    @POST("driver")
-    Call<Driver> createDriver(@Body Driver driver);
+    //Registro de un nuevo portador de objetos o conductor
+    @POST("register")
+//    Call<Driver> createDriver(@Body Driver driver);
+    Call<RegistryCode> createDriver(@Body Driver driver);
 
     // Realiza una petición POST para establecer relación conductor-vehiculo
     @FormUrlEncoded
-    @POST("vehicleDriver")
+    @POST("vehicleDriverApp")
     Call<Message> driverVehicleRelation(
             @Field("id_driver") int id_driver,
             @Field("id_vehicle") int id_vehicle
@@ -88,7 +91,7 @@ public interface JsonHerokuapp {
     @FormUrlEncoded
     @POST("driverAvailability")
     Call<Message> driverAvailability(
-            @Field("id_driver") int id_driver,
+            @Field("id") int id_driver,
             @Field("availability") Boolean availability
     );
 
@@ -96,7 +99,7 @@ public interface JsonHerokuapp {
     @FormUrlEncoded
     @POST("vehicleAvailability")
     Call<Message> vehicleAvailability(
-            @Field("id_vehicle") int id_vehicle,
+            @Field("id") int id_vehicle,
             @Field("availability") Boolean availability
     );
 
@@ -106,10 +109,19 @@ public interface JsonHerokuapp {
     @GET("posts")
     Call<LoginCode> loginDriver(@QueryMap Map<String, String> parameters);
 
-    @GET("loginDriver/{email}/{password}")
+    // método que usa el MainActivity sin Bcrypt
+    //@GET("loginDriver/{email}/{password}")
+    //Call<LoginCode> loginDriver(
+    //@Path("email") String email,
+    //@Path("password") String password
+    //);
+
+    // método que usa el MainActivity sin Bcrypt
+    @FormUrlEncoded
+    @POST("loginDriver")
     Call<LoginCode> loginDriver(
-            @Path("email") String email,
-            @Path("password") String password
+        @Field("email") String email,
+        @Field("password") String password
     );
 
     // Llamada GET al servidor que devuelve un objeto Driver a partir del id_driver

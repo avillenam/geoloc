@@ -13,11 +13,7 @@ import com.uned.geoloc_3.Interface.JsonHerokuapp;
 import com.uned.geoloc_3.Model.Driver;
 import com.uned.geoloc_3.Model.LoginCode;
 
-// Tutorial Bcrypt para Android https://www.youtube.com/watch?v=Zua2BjFB5UI
-import at.favre.lib.crypto.bcrypt.BCrypt;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -52,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://avillena-pfg.herokuapp.com/")
+//                .baseUrl("http:192.168.1.72:3000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -86,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        //obtieneDrivers();
-
     }
 
     private void obtieneDriver() {
@@ -148,18 +142,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Function that make Driver login
     private void loginUser(final String email, String pass) {
-        //Map<String, String> parameters = new HashMap<>();
-        //parameters.put("userId", email);
-        //parameters.put("_sort", pass);
-
-        //final String emailUser = email;
-
         System.out.println("Parametros recibidos de la llamada:");
         System.out.println(email);
         System.out.println(pass);
 
-        //Call<Driver> call = jsonHerokuapp.createDriver(driver);
-        //Call<Vehicle> call = jsonHerokuapp.createVehicle("Car", "Tesla", "S", 5, "Electric", true);
         Call<LoginCode> call = jsonHerokuapp.loginDriver(email, pass);
         call.enqueue(new Callback<LoginCode>() {
             @Override
@@ -169,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(response);
 
                     Toast.makeText(MainActivity.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-                    //System.out.println("Code: " + response.code());
                     return;
                 }
 
@@ -179,13 +164,12 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(codigo);
                 System.out.println(id_driver);
                 System.out.println(loginCode);
-                //Toast.makeText(MainActivity.this, "Code: " + codigo, Toast.LENGTH_SHORT).show();
                 switch (codigo) {
-                    case 0:
+                    case 0: //El usuario introducido no existe en el sistema o es incorrecto.
                         System.out.println("El usuario introducido no existe en el sistema. Regístrese");
                         Toast.makeText(MainActivity.this, "El usuario introducido no existe en el sistema. Regístrese", Toast.LENGTH_LONG).show();
                         break;
-                    case 1:
+                    case 1: //Usuario introducido Correctamente
                         System.out.println("Usuario introducido Correctamente!!");
                         Toast.makeText(MainActivity.this, "Usuario introducido Correctamente!!", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(MainActivity.this, Activity_Usuario_Conectado.class);
@@ -201,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
 
                         break;
-                    case 2:
+                    case 2: //El password introducido es erróneo
                         System.out.println("El password introducido es erróneo. Prueba de nuevo");
                         Toast.makeText(MainActivity.this, "El password introducido es erróneo. Prueba de nuevo", Toast.LENGTH_LONG).show();
                         break;
