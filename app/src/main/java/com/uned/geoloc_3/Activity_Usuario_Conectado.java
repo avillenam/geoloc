@@ -33,6 +33,8 @@ import com.uned.geoloc_3.Model.Driver;
 import com.uned.geoloc_3.Model.LoginCode;
 import com.uned.geoloc_3.Model.Message;
 import com.uned.geoloc_3.Model.Vehicle;
+import com.uned.geoloc_3.CONSTANTES;
+
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -49,10 +51,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.uned.geoloc_3.CONSTANTES.BASE_URL;
+
 public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     TextView txt_emailUSer, txt_idDriver, txt_name, txt_surname, txt_mobile, txt_gender;
-    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_fuel, txt_matricula;
+    TextView txt_idVehicle, txt_type, txt_brand, txt_model, txt_matricula;
     TextView txt_latitud, txt_longitud, txt_direccion, txt_precision, txt_velocidad;
     Button btn_back, btn_exit, btn_new_vehicle, btn_deattach_vehicle, btn_guardar_posicion;
     Spinner spinner_vehicles, spinner_time;
@@ -98,7 +102,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
         location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        txt_emailUSer = (TextView) findViewById(R.id.txt_email2);
+        txt_emailUSer = (TextView) findViewById(R.id.txt_mail);
         txt_idDriver = (TextView) findViewById(R.id.txt_idDriver2);
         txt_name = (TextView) findViewById(R.id.txt_name2);
         txt_surname = (TextView) findViewById(R.id.txt_surname2);
@@ -108,8 +112,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_type = (TextView) findViewById(R.id.txt_type2);
         txt_brand = (TextView) findViewById(R.id.txt_brand2);
         txt_model = (TextView) findViewById(R.id.txt_model2);
-        txt_fuel = (TextView) findViewById(R.id.txt_fuel2);
-        txt_matricula = (TextView) findViewById(R.id.txt_matricula);
+        txt_matricula = (TextView) findViewById(R.id.txt_mail);
         btn_back = (Button) findViewById(R.id.btn_back);
         btn_exit = (Button) findViewById(R.id.btn_exit);
         btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
@@ -133,8 +136,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://avillena-pfg.herokuapp.com/")
-//                .baseUrl("http:192.168.1.72:3000/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -175,11 +177,12 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             }
         });
 
-        // TODO: crear nuevo vehículo
         btn_new_vehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Activity_Usuario_Conectado.this, "Crear nuevo Vehiculo", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Activity_Usuario_Conectado.this, ObjetoNuevoActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -189,8 +192,21 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
                 Toast.makeText(Activity_Usuario_Conectado.this, "Desenlazar Vehiculo del Conductor", Toast.LENGTH_SHORT).show();
                 deleteVehicleDriverRelation(id_current_driver);
-
                 vehicleAvailability(id_current_vehicle, true);
+                driverAvailability(id_current_driver, true);
+
+                // Refresca el Activity
+                Intent intent = new Intent(Activity_Usuario_Conectado.this, Activity_Usuario_Conectado.class);
+
+                // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
+                Bundle userBundle = new Bundle();
+                userBundle.putString("email", email);
+                userBundle.putInt("id_driver", id_current_driver);
+
+                // Le añadimos al Intent los datos que queremos enviar
+                intent.putExtras(userBundle);
+
+                startActivity(intent);
 
             }
         });
@@ -514,8 +530,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     System.out.println("Tipo:" + current_vehicle.getType());
                     System.out.println("Marca:" + current_vehicle.getBrand());
                     System.out.println("Modelo:" + current_vehicle.getModel());
-                    System.out.println("Combustible:" + current_vehicle.getFuel());
-                    System.out.println("Pasajeros:" + current_vehicle.getPassengers());
+
 
                     // Rellenar los TextView con los datos correspondientes del vehículo asociado al conductor actual
                     txt_idVehicle.setText(String.valueOf(id_current_vehicle));
@@ -523,7 +538,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     txt_type.setText(current_vehicle.getType());
                     txt_brand.setText(current_vehicle.getBrand());
                     txt_model.setText(current_vehicle.getModel());
-                    txt_fuel.setText(current_vehicle.getFuel());
                 } else {
                     // Rellenar los TextView con los datos vacios
                     txt_idVehicle.setText("");
@@ -531,7 +545,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     txt_type.setText("");
                     txt_brand.setText("");
                     txt_model.setText("");
-                    txt_fuel.setText("");
                 }
                 imprimeEstadoActual("Después de getVehicleByIdDriver");
 
@@ -626,12 +639,25 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     current_vehicle = selected_vehicle;
                     id_current_vehicle = id_selected_vehicle;
 
-                    Toast.makeText(Activity_Usuario_Conectado.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Vehículo seleccionado" + selected_vehicle, Toast.LENGTH_LONG).show();
                     // Rellenar los TextView con los datos correspondientes del vehículo seleccionado
                     rellenaTxtViewVehicle();
 
                     driverAvailability(id_current_driver, false);
                     vehicleAvailability(id_current_vehicle, false);
+
+                    // Refresca el Activity
+                    Intent intent = new Intent(Activity_Usuario_Conectado.this, Activity_Usuario_Conectado.class);
+
+                    // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
+                    Bundle userBundle = new Bundle();
+                    userBundle.putString("email", email);
+                    userBundle.putInt("id_driver", id_current_driver);
+
+                    // Le añadimos al Intent los datos que queremos enviar
+                    intent.putExtras(userBundle);
+
+                    startActivity(intent);
 
                 }
             }
@@ -761,7 +787,6 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         txt_type.setText("");
         txt_brand.setText("");
         txt_model.setText("");
-        txt_fuel.setText("");
     }
 
     private void rellenaTxtViewVehicle() {
@@ -771,9 +796,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             txt_type.setText(current_vehicle.getType());
             txt_brand.setText(current_vehicle.getBrand());
             txt_model.setText(current_vehicle.getModel());
-            txt_fuel.setText(current_vehicle.getFuel());
         }
-
     }
 
     // muestra Toast con la selección del vehículo

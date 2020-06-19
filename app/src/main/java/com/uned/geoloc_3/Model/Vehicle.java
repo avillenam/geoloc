@@ -6,18 +6,14 @@ public class Vehicle {
     private String type;
     private String brand;
     private String model;
-    private int passengers;
-    private String fuel;
     private Boolean available;
 
-    public Vehicle(String matricula, String type, String brand, String model, int passengers, String fuel, Boolean available) {
+    public Vehicle( String type, String matricula, String brand, String model, Boolean available) {
         this.matricula = matricula;
         this.id_vehicle = id_vehicle;
         this.type = type;
         this.brand = brand;
         this.model = model;
-        this.passengers = passengers;
-        this.fuel = fuel;
         this.available = available;
     }
 
@@ -41,27 +37,19 @@ public class Vehicle {
         return model;
     }
 
-    public int getPassengers() {
-        return passengers;
-    }
-
-    public String getFuel() {
-        return fuel;
-    }
-
     public Boolean getAvailable() {
         return available;
     }
 
     @Override
     public String toString() {
-        return "Vehicle{" +
-                "id_vehicle=" + id_vehicle +
-                ", matricula='" + matricula + '\'' +
-                ", type='" + type + '\'' +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                '}';
+        return "" +
+                "[" + id_vehicle + "]: " +
+                " " + matricula +
+                ", " + type +
+                ", " + brand +
+                ", " + model +
+                "";
     }
 }
 

@@ -11,11 +11,15 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Activity_Usuario_Conectado"></activity>
+        android:theme="@style/Theme.AppCompat.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ObjetoNuevoActivity"
+            android:label="@string/title_activity_objeto_nuevo"
+            android:theme="@style/NoActionBar"></activity>
+        <activity android:name=".Activity_Usuario_Conectado" />
         <activity android:name=".Activity_Registro" />
         <activity android:name=".MainActivity">
             <intent-filter>

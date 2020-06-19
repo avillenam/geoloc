@@ -13,8 +13,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return "response{" +
-                "response='" + response + '\'' +
-                '}';
+        return "" + response;
     }
 }

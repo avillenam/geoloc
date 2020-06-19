@@ -4,14 +4,6 @@
         <item>Masculino</item>
         <item>Femenino</item>
     </string-array>
-    <string-array name="vehicle_type">
-        <item>Coche</item>
-        <item>Camión</item>
-        <item>Motocicleta</item>
-        <item>Bicicle</item>
-        <item>Scooter Eléctrico</item>
-        <item>Objeto</item>
-    </string-array>
     <string-array name="fuel_type">
         <item>Gasolina</item>
         <item>Diesel</item>
@@ -25,5 +17,14 @@
         <item>10</item>
         <item>20</item>
         <item>30</item>
+    </string-array>
+    <string-array name="vehicle_type">
+        <item>Objeto</item>
+        <item>Coche</item>
+        <item>Furgoneta</item>
+        <item>Camión</item>
+        <item>Bicicleta</item>
+        <item>Motocicleta</item>
+        <item>Scooter Eléctrico</item>
     </string-array>
 </resources>

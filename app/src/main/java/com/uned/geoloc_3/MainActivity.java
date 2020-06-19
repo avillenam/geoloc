@@ -23,6 +23,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.uned.geoloc_3.CONSTANTES.BASE_URL;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnLogin, btoRegister, btn_exit;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btn_login);
         btoRegister = (Button) findViewById(R.id.btn_register);
         btn_exit = (Button) findViewById(R.id.btn_exit);
-        et_email = (EditText) findViewById(R.id.txt_email2);
+        et_email = (EditText) findViewById(R.id.txt_mail);
         et_password = (EditText) findViewById(R.id.et_password);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -47,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         //crea el objeto Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://avillena-pfg.herokuapp.com/")
-//                .baseUrl("http:192.168.1.72:3000/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

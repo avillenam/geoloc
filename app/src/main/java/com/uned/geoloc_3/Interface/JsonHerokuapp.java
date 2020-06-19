@@ -44,10 +44,6 @@ public interface JsonHerokuapp {
             @Field("available") Boolean available
     );
 
-    @FormUrlEncoded
-    @POST("vehicle")
-    Call<Vehicle> createVehicle(@FieldMap Map<String, String> fields);
-
     // POST request for creating a new Driver
     @FormUrlEncoded
     @POST("driver")
@@ -67,9 +63,13 @@ public interface JsonHerokuapp {
     @POST("driver")
     Call<Driver> createDriver(@FieldMap Map<String, String> fields);
 
-    //Registro de un nuevo portador de objetos o conductor
+    // Registro de un nuevo objeto
+    @POST("createNewObject")
+    Call<RegistryCode> createNewObject(@Body Vehicle vehicle);
+
+
+    // Registro de un nuevo portador de objetos o conductor
     @POST("register")
-//    Call<Driver> createDriver(@Body Driver driver);
     Call<RegistryCode> createDriver(@Body Driver driver);
 
     // Realiza una petición POST para establecer relación conductor-vehiculo

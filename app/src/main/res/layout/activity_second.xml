@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_registry"
         app:layout_constraintTop_toBottomOf="@+id/et_mobile_phone"
-        app:layout_constraintVertical_bias="0.429" />
+        app:layout_constraintVertical_bias="0.485" />
 
     <Button
         android:id="@+id/btn_registry"
@@ -40,7 +40,7 @@
         app:layout_constraintHorizontal_bias="0.697"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_mobile_phone"
-        app:layout_constraintVertical_bias="0.429" />
+        app:layout_constraintVertical_bias="0.485" />
 
     <Button
         android:id="@+id/btn_exit"
@@ -61,7 +61,7 @@
         app:layout_constraintVertical_bias="0.878" />
 
     <EditText
-        android:id="@+id/txt_email2"
+        android:id="@+id/txt_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -91,7 +91,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_email2" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_mail" />
 
     <EditText
         android:id="@+id/et_name"
@@ -145,7 +145,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_birthdate" />
 
     <Spinner
-        android:id="@+id/spinner_vehicles"
+        android:id="@+id/spinner_gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -189,7 +189,7 @@
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_gender" />
 
     <TextView
         android:id="@+id/textView1"
@@ -203,7 +203,6 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Registrar Nuevo Usuario"
-        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
