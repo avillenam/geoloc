@@ -1,4 +1,4 @@
-package com.uned.geoloc_3;
+package com.uned.geoloc;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -28,12 +28,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.uned.geoloc_3.Interface.JsonHerokuapp;
-import com.uned.geoloc_3.Model.Driver;
-import com.uned.geoloc_3.Model.LoginCode;
-import com.uned.geoloc_3.Model.Message;
-import com.uned.geoloc_3.Model.Vehicle;
-import com.uned.geoloc_3.CONSTANTES;
+import com.uned.geoloc.Interface.JsonHerokuapp;
+import com.uned.geoloc.Model.Driver;
+import com.uned.geoloc.Model.LoginCode;
+import com.uned.geoloc.Model.Message;
+import com.uned.geoloc.Model.Vehicle;
+import com.uned.geoloc.CONSTANTES;
 
 
 import java.io.IOException;
@@ -51,7 +51,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.uned.geoloc_3.CONSTANTES.BASE_URL;
+import static com.uned.geoloc.CONSTANTES.BASE_URL;
 
 public class Activity_Usuario_Conectado extends AppCompatActivity {
 
@@ -102,31 +102,31 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
         location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        txt_emailUSer = (TextView) findViewById(R.id.txt_mail);
-        txt_idDriver = (TextView) findViewById(R.id.txt_idDriver2);
-        txt_name = (TextView) findViewById(R.id.txt_name2);
-        txt_surname = (TextView) findViewById(R.id.txt_surname2);
-        txt_mobile = (TextView) findViewById(R.id.txt_mobile2);
-        txt_gender = (TextView) findViewById(R.id.txt_gender2);
-        txt_idVehicle = (TextView) findViewById(R.id.txt_idVehicle2);
-        txt_type = (TextView) findViewById(R.id.txt_type2);
-        txt_brand = (TextView) findViewById(R.id.txt_brand2);
-        txt_model = (TextView) findViewById(R.id.txt_model2);
-        txt_matricula = (TextView) findViewById(R.id.txt_mail);
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_exit = (Button) findViewById(R.id.btn_exit);
-        btn_new_vehicle = (Button) findViewById(R.id.btn_create_vehicle);
-        btn_deattach_vehicle = (Button) findViewById(R.id.btn_deattach_vehicle);
-        btn_guardar_posicion = (Button) findViewById(R.id.btn_guardar_posicion);
-        spinner_vehicles = (Spinner) findViewById(R.id.spinner_vehicles);
-        spinner_time = (Spinner) findViewById(R.id.spinner_time);
-        switch_start_location = (Switch) findViewById(R.id.switch1);
+        txt_emailUSer = findViewById(R.id.txt_mail);
+        txt_idDriver = findViewById(R.id.txt_idDriver2);
+        txt_name = findViewById(R.id.txt_name2);
+        txt_surname = findViewById(R.id.txt_surname2);
+        txt_mobile = findViewById(R.id.txt_mobile2);
+        txt_gender = findViewById(R.id.txt_gender2);
+        txt_idVehicle = findViewById(R.id.txt_idVehicle2);
+        txt_type = findViewById(R.id.txt_type2);
+        txt_brand = findViewById(R.id.txt_brand2);
+        txt_model = findViewById(R.id.txt_model2);
+        txt_matricula = findViewById(R.id.txt_mail);
+        btn_back = findViewById(R.id.btn_back);
+        btn_exit = findViewById(R.id.btn_exit);
+        btn_new_vehicle = findViewById(R.id.btn_create_vehicle);
+        btn_deattach_vehicle = findViewById(R.id.btn_deattach_vehicle);
+        btn_guardar_posicion = findViewById(R.id.btn_guardar_posicion);
+        spinner_vehicles = findViewById(R.id.spinner_vehicles);
+        spinner_time = findViewById(R.id.spinner_time);
+        switch_start_location = findViewById(R.id.switch1);
 
-        txt_latitud = (TextView) findViewById(R.id.txt_latitud);
-        txt_longitud = (TextView) findViewById(R.id.txt_longitud);
-        txt_direccion = (TextView) findViewById(R.id.txt_direccion);
-        txt_precision = (TextView) findViewById(R.id.txt_precision);
-        txt_velocidad = (TextView) findViewById(R.id.txt_speed);
+        txt_latitud = findViewById(R.id.txt_latitud);
+        txt_longitud = findViewById(R.id.txt_longitud);
+        txt_direccion = findViewById(R.id.txt_direccion);
+        txt_precision = findViewById(R.id.txt_precision);
+        txt_velocidad = findViewById(R.id.txt_speed);
 
 
         time_seconds = getResources().getStringArray(R.array.time_interval);
@@ -181,7 +181,19 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Activity_Usuario_Conectado.this, "Crear nuevo Vehiculo", Toast.LENGTH_SHORT).show();
+
+                finish();
+
                 Intent intent = new Intent(Activity_Usuario_Conectado.this, ObjetoNuevoActivity.class);
+
+                // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
+                Bundle userBundle = new Bundle();
+                userBundle.putString("email", email);
+                userBundle.putInt("id_driver", id_current_driver);
+
+                // Le añadimos al Intent los datos que queremos enviar
+                intent.putExtras(userBundle);
+
                 startActivity(intent);
             }
         });
@@ -194,6 +206,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 deleteVehicleDriverRelation(id_current_driver);
                 vehicleAvailability(id_current_vehicle, true);
                 driverAvailability(id_current_driver, true);
+
+                finish();
 
                 // Refresca el Activity
                 Intent intent = new Intent(Activity_Usuario_Conectado.this, Activity_Usuario_Conectado.class);
@@ -386,8 +400,8 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1000);
             return;
         }
-        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener) Local);
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) Local);
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, Local);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, Local);
 
         txt_latitud.setText("Localizacion agregada");
         txt_longitud.setText("");
@@ -646,6 +660,9 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                     driverAvailability(id_current_driver, false);
                     vehicleAvailability(id_current_vehicle, false);
 
+
+                    finish();
+
                     // Refresca el Activity
                     Intent intent = new Intent(Activity_Usuario_Conectado.this, Activity_Usuario_Conectado.class);
 
@@ -737,7 +754,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 System.out.println("msg driverVehicleRelation:" + msg);
                 //System.out.println("msg.getResponse() driverVehicleRelation: " + msg.getResponse());
                 //Log.i("onSuccess", response.body().toString());
-                Toast.makeText(Activity_Usuario_Conectado.this, msg.getResponse().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Usuario_Conectado.this, msg.getResponse(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

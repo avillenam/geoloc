@@ -1,4 +1,4 @@
-package com.uned.geoloc_3.Model;
+package com.uned.geoloc.Model;
 
 public class LoginCode {
     private int code;

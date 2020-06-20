@@ -1,4 +1,4 @@
-package com.uned.geoloc_3;
+package com.uned.geoloc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,10 +12,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.uned.geoloc_3.Interface.JsonHerokuapp;
-import com.uned.geoloc_3.Model.Driver;
-import com.uned.geoloc_3.Model.RegistryCode;
-import com.uned.geoloc_3.Model.Vehicle;
+import com.uned.geoloc.Interface.JsonHerokuapp;
+import com.uned.geoloc.Model.Driver;
+import com.uned.geoloc.Model.RegistryCode;
+import com.uned.geoloc.Model.Vehicle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.uned.geoloc_3.CONSTANTES.BASE_URL;
+import static com.uned.geoloc.CONSTANTES.BASE_URL;
 
 public class Activity_Registro extends AppCompatActivity {
 
@@ -45,16 +45,16 @@ public class Activity_Registro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        btn_registry = (Button) findViewById(R.id.btn_registry);
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_exit = (Button) findViewById(R.id.btn_exit);
-        spinner_genre = (Spinner) findViewById(R.id.spinner_gender);
-        et_email = (EditText) findViewById(R.id.txt_mail);
-        et_password = (EditText) findViewById(R.id.et_password);
-        et_name = (EditText) findViewById(R.id.et_name);
-        et_surname = (EditText) findViewById(R.id.et_surname);
-        et_birthdate = (EditText) findViewById(R.id.et_birthdate);
-        et_mobile_phone = (EditText) findViewById(R.id.et_mobile_phone);
+        btn_registry = findViewById(R.id.btn_registry);
+        btn_back = findViewById(R.id.btn_back);
+        btn_exit = findViewById(R.id.btn_exit);
+        spinner_genre = findViewById(R.id.spinner_gender);
+        et_email = findViewById(R.id.txt_mail);
+        et_password = findViewById(R.id.et_password);
+        et_name = findViewById(R.id.et_name);
+        et_surname = findViewById(R.id.et_surname);
+        et_birthdate = findViewById(R.id.et_birthdate);
+        et_mobile_phone = findViewById(R.id.et_mobile_phone);
 
         generos = getResources().getStringArray(R.array.genero);
         ArrayAdapter<String> gender_adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, generos);
@@ -113,42 +113,6 @@ public class Activity_Registro extends AppCompatActivity {
             }
         });
     }
-
-//    private void getVehicles() {
-//        Call<List<Vehicle>> call = jsonHerokuapp.getVehicles();
-//
-//        // Hace un enqueue
-//        call.enqueue(new Callback<List<Vehicle>>() {
-//            @Override
-//            public void onResponse(Call<List<Vehicle>> call, Response<List<Vehicle>> response) {
-//
-//                // si no es satisfactoria la respuesta, muestra un mensaje con el error
-//                if (!response.isSuccessful()) {
-//                    System.out.println("Código: " + response.code());
-//                }
-//
-//                Log.i("onSuccess", response.body().toString());
-//
-//                //almacena la respuesta en una lista. Ya estan pareseados al haber usado un converter (GSON)
-//                vehiclesList = new ArrayList<Vehicle>();
-//                vehiclesList = response.body();
-//                vehiclesString = new ArrayList<String>();
-//
-//                System.out.println("Tipo: ");
-//                for (Vehicle vehicle : vehiclesList) {
-//                    String content = "";
-//                    content += String.valueOf(vehicle.getId_vehicle());
-//                    vehiclesString.add(content);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Vehicle>> call, Throwable t) {
-//                System.out.println(t.getMessage());
-//            }
-//
-//        });
-//    }
 
 
     // Método que realiza la petición POST al servidor para crear un nuevo Driver
@@ -219,62 +183,5 @@ public class Activity_Registro extends AppCompatActivity {
                 Toast.makeText(Activity_Registro.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-
-    // Método que realiza la petición POST al servidor para crear un nuevo Vehicle
-//    private void createVehicle() {
-//        Vehicle vehicle = new Vehicle("9660CCR", "Car", "Tesla", "S", 5, "Electric", true);
-//
-//
-//        Map<String, String> fields = new HashMap<>();
-//        fields.put("type", "Car");
-//        fields.put("brand", "Seat");
-//        fields.put("model", "Ibiza");
-//        fields.put("passengers", "5");
-//        fields.put("fuel", "Gas");
-//        fields.put("available", "true");
-//
-//        Call<Vehicle> call = jsonHerokuapp.createVehicle(fields);
-//
-//
-//        call.enqueue(new Callback<Vehicle>() {
-//            @Override
-//            public void onResponse(Call<Vehicle> call, Response<Vehicle> response) {
-//                if (!response.isSuccessful()) {
-//                    Toast.makeText(Activity_Registro.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                Vehicle postResponse = response.body();
-//
-//                String content = "";
-//                content += "Code: " + response.code() + "\n";
-//                content += "id_vehicle: " + postResponse.getId_vehicle() + "\n";
-//                content += "Type: " + postResponse.getType() + "\n";
-//                content += "Brand: " + postResponse.getBrand() + "\n";
-//                content += "Model: " + postResponse.getModel() + "\n";
-//                content += "Passengers: " + postResponse.getPassengers() + "\n";
-//                content += "Fuel: " + postResponse.getFuel() + "\n";
-//                content += "Available: " + postResponse.getAvailable() + "\n\n";
-//
-//                System.out.println(content);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Vehicle> call, Throwable t) {
-//                Toast.makeText(Activity_Registro.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-
-    // captura el vehiculo seleccionado
-    public void getSelectedVehicle(View v) {
-        String vehicle = (String) spinner_genre.getSelectedItem();
-        displayVehicleData(vehicle);
-    }
-
-    public void displayVehicleData(String vehicle) {
-        Toast.makeText(this, vehicle, Toast.LENGTH_LONG).show();
     }
 }

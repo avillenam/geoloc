@@ -1,13 +1,13 @@
-package com.uned.geoloc_3;
+package com.uned.geoloc;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.uned.geoloc_3.Interface.JsonHerokuapp;
-import com.uned.geoloc_3.Model.RegistryCode;
-import com.uned.geoloc_3.Model.Vehicle;
+import com.uned.geoloc.Interface.JsonHerokuapp;
+import com.uned.geoloc.Model.RegistryCode;
+import com.uned.geoloc.Model.Vehicle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,7 +27,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.uned.geoloc_3.CONSTANTES.BASE_URL;
+import static com.uned.geoloc.CONSTANTES.BASE_URL;
 
 public class ObjetoNuevoActivity extends AppCompatActivity {
     private JsonHerokuapp jsonHerokuapp;
@@ -38,17 +38,20 @@ public class ObjetoNuevoActivity extends AppCompatActivity {
     private List<String> vehiclesString;
     String[] objects_type;
 
+    int id_current_driver;
+    String email;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_objeto_nuevo);
 
-        btn_new_object = (Button) findViewById(R.id.btn_new_object);
-        btn_back = (Button) findViewById(R.id.btn_back);
-        btn_exit = (Button) findViewById(R.id.btn_exit);
-        spinner_objects = (Spinner) findViewById(R.id.spinner_objects);
-        et_matricula = (EditText) findViewById(R.id.et_matricula);
-        et_marca = (EditText) findViewById(R.id.et_marca);
-        et_modelo = (EditText) findViewById(R.id.et_modelo);
+        btn_new_object = findViewById(R.id.btn_new_object);
+        btn_back = findViewById(R.id.btn_back);
+        btn_exit = findViewById(R.id.btn_exit);
+        spinner_objects = findViewById(R.id.spinner_objects);
+        et_matricula = findViewById(R.id.et_matricula);
+        et_marca = findViewById(R.id.et_marca);
+        et_modelo = findViewById(R.id.et_modelo);
 
 
         objects_type = getResources().getStringArray(R.array.vehicle_type);
@@ -104,9 +107,22 @@ public class ObjetoNuevoActivity extends AppCompatActivity {
                 }
 
                 Toast.makeText(ObjetoNuevoActivity.this, "Crear objeto nuevo", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
+
+        //Obtenemos los datos del conductor enviados a través del Bundle
+        Bundle userBundle = this.getIntent().getExtras();
+        if (userBundle != null) {
+            // Recibe del MainActivity el 'email' y el 'id_driver' del conductor conectado
+            email = userBundle.getString("email");
+            id_current_driver = userBundle.getInt("id_driver");
+
+            System.out.println("parámetros recibidos a través de un Bundle: ");
+            System.out.println(id_current_driver);
+            System.out.println(email);
+        }
 
         // Cerrar el Activity
         btn_exit.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +173,14 @@ public class ObjetoNuevoActivity extends AppCompatActivity {
                         System.out.println("Objeto registrado Correctamente!!");
                         Toast.makeText(ObjetoNuevoActivity.this, "Objeto registrado Correctamente!!", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(ObjetoNuevoActivity.this, Activity_Usuario_Conectado.class);
+
+                        // Objeto que se va a encargar de enviar la información del usuario a la otra actividad
+                        Bundle userBundle = new Bundle();
+                        userBundle.putString("email", email);
+                        userBundle.putInt("id_driver", id_current_driver);
+
+                        // Le añadimos al Intent los datos que queremos enviar
+                        intent.putExtras(userBundle);
 
                         startActivity(intent);
 

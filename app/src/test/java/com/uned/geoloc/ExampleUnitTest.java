@@ -1,4 +1,4 @@
-package com.uned.geoloc_3;
+package com.uned.geoloc;
 
 import org.junit.Test;
 

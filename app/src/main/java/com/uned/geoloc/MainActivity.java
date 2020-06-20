@@ -1,4 +1,4 @@
-package com.uned.geoloc_3;
+package com.uned.geoloc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,9 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.uned.geoloc_3.Interface.JsonHerokuapp;
-import com.uned.geoloc_3.Model.Driver;
-import com.uned.geoloc_3.Model.LoginCode;
+import com.uned.geoloc.Interface.JsonHerokuapp;
+import com.uned.geoloc.Model.Driver;
+import com.uned.geoloc.Model.LoginCode;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +23,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.uned.geoloc_3.CONSTANTES.BASE_URL;
+import static com.uned.geoloc.CONSTANTES.BASE_URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnLogin = (Button) findViewById(R.id.btn_login);
-        btoRegister = (Button) findViewById(R.id.btn_register);
-        btn_exit = (Button) findViewById(R.id.btn_exit);
-        et_email = (EditText) findViewById(R.id.txt_mail);
-        et_password = (EditText) findViewById(R.id.et_password);
+        btnLogin = findViewById(R.id.btn_login);
+        btoRegister = findViewById(R.id.btn_register);
+        btn_exit = findViewById(R.id.btn_exit);
+        et_email = findViewById(R.id.txt_mail);
+        et_password = findViewById(R.id.et_password);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(1, TimeUnit.MINUTES)

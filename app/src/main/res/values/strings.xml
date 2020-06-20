@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">geoloc_3</string>
+    <string name="app_name">geoloc</string>
     <string-array name="numbers">
         <item>One</item>
         <item>Two</item>

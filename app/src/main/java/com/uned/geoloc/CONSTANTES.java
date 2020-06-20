@@ -1,4 +1,4 @@
-package com.uned.geoloc_3;
+package com.uned.geoloc;
 
 public class CONSTANTES {
     static final String BASE_URL = "https://avillena-pfg.herokuapp.com/";

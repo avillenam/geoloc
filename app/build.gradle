@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.uned.geoloc_3"
+        applicationId 'com.uned.geoloc'
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1

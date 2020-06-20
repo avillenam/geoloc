@@ -1,10 +1,10 @@
-package com.uned.geoloc_3.Interface;
+package com.uned.geoloc.Interface;
 
-import com.uned.geoloc_3.Model.Driver;
-import com.uned.geoloc_3.Model.LoginCode;
-import com.uned.geoloc_3.Model.Message;
-import com.uned.geoloc_3.Model.RegistryCode;
-import com.uned.geoloc_3.Model.Vehicle;
+import com.uned.geoloc.Model.Driver;
+import com.uned.geoloc.Model.LoginCode;
+import com.uned.geoloc.Model.Message;
+import com.uned.geoloc.Model.RegistryCode;
+import com.uned.geoloc.Model.Vehicle;
 
 import java.util.List;
 import java.util.Map;
