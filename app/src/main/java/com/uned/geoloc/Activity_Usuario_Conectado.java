@@ -52,6 +52,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.uned.geoloc.CONSTANTES.BASE_URL;
+import static com.uned.geoloc.CONSTANTES.TOLERANCIA_PRECISION;
 
 public class Activity_Usuario_Conectado extends AppCompatActivity {
 
@@ -314,7 +315,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
 
     //Insertamos los datos a nuestro webService a través del objeto HttpPost
     private boolean insertar() {
-        if (accuracy <= 100) {
+        if (accuracy <= TOLERANCIA_PRECISION) {
             System.out.println("currentPoint: " + currentPoint.toString());
             System.out.println("previousPoint: " + previousPoint.toString());
 
