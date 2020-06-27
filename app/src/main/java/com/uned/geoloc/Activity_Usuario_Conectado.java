@@ -275,6 +275,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new Insertar(Activity_Usuario_Conectado.this).execute();
+                Toast.makeText(Activity_Usuario_Conectado.this, "Posición registrada.", Toast.LENGTH_SHORT).show();
                 codigo = 0;
             }
         });
