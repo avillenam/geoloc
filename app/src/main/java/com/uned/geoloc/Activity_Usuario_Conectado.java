@@ -380,7 +380,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(context, "Dato no insertado con éxito\nSe ha de asociar un objeto al portador.", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, "Dato no insertado con éxito\nSe ha de asociar un objeto al portador.", Toast.LENGTH_LONG).show();
                     }
                 });
             return null;
