@@ -240,30 +240,34 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (switch_start_location.isChecked()) {
-                    Toast.makeText(Activity_Usuario_Conectado.this, "Comienza la localización", Toast.LENGTH_SHORT).show();
-                    // temporizador cada 5 segundos guarda la posición
-                    //http://js.dokry.com/cul-es-el-equivalente-a-un-setinterval-settimeout-de-javascript-en-android-java.html
+                    if(current_vehicle!=null){
+                        Toast.makeText(Activity_Usuario_Conectado.this, "Comienza la localización", Toast.LENGTH_SHORT).show();
+                        // temporizador cada 5 segundos guarda la posición
+                        //http://js.dokry.com/cul-es-el-equivalente-a-un-setinterval-settimeout-de-javascript-en-android-java.html
 
-                    String update_interval = spinner_time.getSelectedItem().toString();
-                    System.out.println("update_interval: " + update_interval);
-                    System.out.println("tipo update_interval: " + update_interval.getClass().getName());
+                        String update_interval = spinner_time.getSelectedItem().toString();
+                        System.out.println("update_interval: " + update_interval);
+                        System.out.println("tipo update_interval: " + update_interval.getClass().getName());
 
-                    if (update_interval != null) {
-                        Integer interval = Integer.parseInt(update_interval);
-                        interval = interval * 1000;
-                        System.out.println("interval: " + interval);
-                        System.out.println("tipo interval: " + interval.getClass().getName());
+                        if (update_interval != null) {
+                            Integer interval = Integer.parseInt(update_interval);
+                            interval = interval * 1000;
+                            System.out.println("interval: " + interval);
+                            System.out.println("tipo interval: " + interval.getClass().getName());
 
-                        timer.scheduleAtFixedRate(new TimerTask() {
-                            @Override
-                            public void run() {
-                                new Insertar(Activity_Usuario_Conectado.this).execute();
-                            }
-                        }, 0, interval);
-                    } else {
-                        Toast.makeText(Activity_Usuario_Conectado.this, "¡No has seleccionado intervalo de tiempo!", Toast.LENGTH_LONG).show();
+                            timer.scheduleAtFixedRate(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    new Insertar(Activity_Usuario_Conectado.this).execute();
+                                }
+                            }, 0, interval);
+                        } else {
+                            Toast.makeText(Activity_Usuario_Conectado.this, "¡No has seleccionado intervalo de tiempo!", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(Activity_Usuario_Conectado.this, "Se ha de seleccionar un objeto", Toast.LENGTH_SHORT).show();
+                        switch_start_location.setChecked(false);
                     }
-
                 } else {
                     timer.cancel();
                     Toast.makeText(Activity_Usuario_Conectado.this, "Para la localización", Toast.LENGTH_SHORT).show();
@@ -274,9 +278,14 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
         btn_guardar_posicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Insertar(Activity_Usuario_Conectado.this).execute();
-                Toast.makeText(Activity_Usuario_Conectado.this, "Posición registrada.", Toast.LENGTH_SHORT).show();
-                codigo = 0;
+                if(current_vehicle==null){
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Se ha de seleccionar un objeto", Toast.LENGTH_SHORT).show();
+                }else{
+                    new Insertar(Activity_Usuario_Conectado.this).execute();
+                    Toast.makeText(Activity_Usuario_Conectado.this, "Posición registrada.", Toast.LENGTH_SHORT).show();
+                    codigo = 0;
+                }
+
             }
         });
 
