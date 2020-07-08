@@ -93,13 +93,24 @@ public class ObjetoNuevoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String matricula = et_matricula.getText().toString();
-                String marca = et_marca.getText().toString();
-                String modelo = et_modelo.getText().toString();
+                String marca;
+                if(et_marca.getText().toString().isEmpty()){
+                    marca = "S/M";
+                }else{
+                    marca = et_marca.getText().toString();
+                }
+
+                String modelo;
+                if(et_modelo.getText().toString().isEmpty()){
+                    modelo="S/M";
+                }else{
+                    modelo = et_modelo.getText().toString();
+                }
 
                 String object_type = spinner_objects.getSelectedItem().toString();
 
-                // Comprobación de los dátos obligatorios
-                if (matricula.isEmpty() || marca.isEmpty() || modelo.isEmpty()) {
+                // Comprobación de los datos obligatorios
+                if (matricula.isEmpty()) {
                     Toast.makeText(ObjetoNuevoActivity.this, "Rellena los campos obligatorios.", Toast.LENGTH_LONG).show();
                 } else {
                     //Realiza una consulta POST para registrar un nuevo Driver

@@ -329,7 +329,7 @@ public class Activity_Usuario_Conectado extends AppCompatActivity {
             System.out.println("currentPoint: " + currentPoint.toString());
             System.out.println("previousPoint: " + previousPoint.toString());
 
-            Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy, direccion, velocidad);
+            Call<LoginCode> call = jsonHerokuapp.vehiclePosition(id_current_vehicle, id_current_driver, lon, lat, accuracy, direccion, velocidad * 3.6);
             call.enqueue(new Callback<LoginCode>() {
                 @Override
                 public void onResponse(Call<LoginCode> call, Response<LoginCode> response) {

@@ -89,9 +89,25 @@ public class Activity_Registro extends AppCompatActivity {
                 String email = et_email.getText().toString();
                 String pass = et_password.getText().toString();
                 String name = et_name.getText().toString();
-                String surname = et_surname.getText().toString();
-                String birthdate = et_birthdate.getText().toString();
-                int mobile_phone = Integer.valueOf(et_mobile_phone.getText().toString());
+                String surname;
+                if(et_surname.getText().toString().isEmpty()){
+                    surname = "";
+                }else{
+                    surname = et_surname.getText().toString();
+                }
+                String birthdate;
+                if(et_birthdate.getText().toString().isEmpty()){
+                    birthdate = "01/01/1980";
+                }else{
+                    birthdate = et_birthdate.getText().toString();
+                }
+                int mobile_phone;
+                if(et_mobile_phone.getText().toString().isEmpty()){
+                    mobile_phone = 0;
+                }else{
+                    mobile_phone = Integer.valueOf(et_mobile_phone.getText().toString());
+                }
+//                int mobile_phone = Integer.valueOf(et_mobile_phone.getText().toString());
                 String genre = spinner_genre.getSelectedItem().toString();
 
                 // Comprobación de los dátos obligatorios
@@ -118,17 +134,27 @@ public class Activity_Registro extends AppCompatActivity {
     // Método que realiza la petición POST al servidor para crear un nuevo Driver
     private void createDriver(String email, String password, String name, String surname, String birthdate, String genre, int mobile_number) {
 
+//        Driver driver = new Driver(email, password, name, surname, birthdate, genre, mobile_number, true);
         Driver driver = new Driver(email, password, name, surname, birthdate, genre, mobile_number, true);
 
         System.out.println("Parametros recibidos de la llamada:");
         System.out.println(email);
         System.out.println(password);
         System.out.println(name);
+        System.out.println(surname);
+        System.out.println(birthdate);
+        System.out.println(genre);
+        System.out.println(mobile_number);
 
         System.out.println("Objeto creado:");
         System.out.println(driver.getEmail());
         System.out.println(driver.getPassword());
         System.out.println(driver.getName());
+        System.out.println(driver.getSurname());
+        System.out.println(driver.getBirthdate());
+        System.out.println(driver.getGenre());
+        System.out.println(driver.getMobile_number());
+        System.out.println(driver.getAvailable());
 
         Call<RegistryCode> call = jsonHerokuapp.createDriver(driver);
 
@@ -137,6 +163,7 @@ public class Activity_Registro extends AppCompatActivity {
             public void onResponse(Call<RegistryCode> call, Response<RegistryCode> response) {
                 if (!response.isSuccessful()) {
                     Toast.makeText(Activity_Registro.this, "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    System.out.println("response.toString:" + response.toString());
                     return;
                 }
 

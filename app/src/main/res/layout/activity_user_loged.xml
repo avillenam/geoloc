@@ -499,7 +499,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/button_rounded_border"
-        android:text="Desenlazar Vehículo"
+        android:text="Desenlazar Objeto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_vehicles"

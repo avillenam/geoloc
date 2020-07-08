@@ -3,9 +3,9 @@ package com.uned.geoloc.Model;
 public class Vehicle {
     private int id_vehicle;
     private String matricula;
-    private String type;
-    private String brand;
-    private String model;
+    private String type = "";
+    private String brand = "";
+    private String model = "";
     private Boolean available;
 
     public Vehicle( String type, String matricula, String brand, String model, Boolean available) {
